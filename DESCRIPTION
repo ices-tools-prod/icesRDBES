@@ -1,0 +1,20 @@
+Package: icesRDBES
+Version: 0.0.1
+Date: 2026-03-09
+Title: Tools for the ICES Regional DataBase and Estimation System
+Authors@R:
+  c(
+    person("Colin", "Millar", role = c("aut", "cre"), email = "colin.millar@ices.dk"),
+    person("Arni", "Magnusson", role = "aut")
+  )
+LazyData: yes
+Description: Tools to support the ICES Regional DataBase and Estimation System
+  (RDBEC) <https://sboxshiny.ices.dk/rdbescatalogue/> to access, analyse, and
+  process fisheries data collected under the EU Data Collection Framework.
+  ICES is an organization facilitating international collaboration in marine
+  science.
+License: GPL-3
+URL: https://github.com/ices-tools-prod/icesRDBES
+Encoding: UTF-8
+RoxygenNote: 7.3.3
+Roxygen: list(old_usage=TRUE)
