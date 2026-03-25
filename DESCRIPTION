@@ -12,7 +12,7 @@ Description: Tools to support the ICES Regional DataBase and Estimation System
   process fisheries data collected under the EU Data Collection Framework.
   ICES is an organization facilitating international collaboration in marine
   science.
-License: GPL-3
+License: file LICENSE
 URL: https://github.com/ices-tools-prod/icesRDBES
 Encoding: UTF-8
 LazyData: true
