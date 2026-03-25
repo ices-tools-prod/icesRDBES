@@ -4,10 +4,9 @@ Date: 2026-03-09
 Title: Tools for the ICES Regional DataBase and Estimation System
 Authors@R:
   c(
-    person("Colin", "Millar", role = c("aut", "cre"), email = "colin.millar@ices.dk"),
-    person("Arni", "Magnusson", role = "aut")
+    person("Ezaj", "Muhammad", role = "aut", email = "ejaz.muhammad@ices.dk"),
+    person("Colin", "Millar", role = c("aut", "cre"), email = "colin.millar@ices.dk")
   )
-LazyData: yes
 Description: Tools to support the ICES Regional DataBase and Estimation System
   (RDBEC) <https://sboxshiny.ices.dk/rdbescatalogue/> to access, analyse, and
   process fisheries data collected under the EU Data Collection Framework.
@@ -16,5 +15,10 @@ Description: Tools to support the ICES Regional DataBase and Estimation System
 License: GPL-3
 URL: https://github.com/ices-tools-prod/icesRDBES
 Encoding: UTF-8
+LazyData: true
+Imports:
+    AzureAuth,
+    httr,
+    jsonlite
 RoxygenNote: 7.3.3
 Roxygen: list(old_usage=TRUE)

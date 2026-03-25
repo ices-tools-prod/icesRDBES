@@ -2,8 +2,8 @@
 % Please edit documentation in R/icesRDBES-package.R
 \docType{package}
 \name{icesRDBES-package}
-\alias{icesRDBES}
 \alias{icesRDBES-package}
+\alias{icesRDBES}
 \title{Tools for the ICES Regional DataBase and Estimation System}
 \description{
 Tools to support the ICES Regional DataBase and Estimation System (RDBES),
@@ -11,8 +11,14 @@ to access, analyse, and process fisheries data collected under the EU Data
 Collection Framework.
 }
 \references{
-ICES Regional DataBase and Estimation System:
-\url{https://sboxshiny.ices.dk/rdbescatalogue/}.
+ICES Regional DataBase and Estimation System: \url{https://sboxshiny.ices.dk/rdbescatalogue/}.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ices-tools-prod/icesRDBES}
+}
+
 }
 \author{
 Colin Millar and Arni Magnusson.
