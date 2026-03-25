@@ -17,6 +17,7 @@ LazyData: true
 Imports:
     AzureAuth,
     httr,
-    jsonlite
+    jsonlite,
+    base64enc
 RoxygenNote: 7.3.3
 Roxygen: list(old_usage=TRUE)
