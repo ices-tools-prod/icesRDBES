@@ -12,7 +12,7 @@ Tools to support the ICES Regional DataBase and Estimation System
 process fisheries data collected under the EU Data Collection Framework.
 
 icesRDBES is implemented as an [R](https://www.r-project.org) package and
-available on [CRAN](https://cran.r-project.org/package=icesRDBES).
+available on [ices-tools-prod.r-universe](https://ices-tools-prod.r-universe.dev/icesRDBES).
 
 Installation
 ------------
@@ -20,7 +20,7 @@ Installation
 icesRDBES can be installed from CRAN using the `install.packages` command:
 
 ```R
-install.packages("icesRDBES")
+install.packages('icesRDBES', repos = c('https://ices-tools-prod.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 Usage
