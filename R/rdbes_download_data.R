@@ -3,7 +3,6 @@
 #' This function authenticates with Azure, creates an export job, polls for completion,
 #' and downloads the resulting ZIP file to the current working directory.
 #'
-#' @param url Character. The RDBES API export URL (e.g., "https://rdbesapi.ices.dk/api/v1/export-jobs").
 #' @param payload List. The filter configuration including hierarchies, format, and filters.
 #'
 #' @details
@@ -11,23 +10,29 @@
 #' \code{list(hierarchies = list("H1"), format = "SingleCsvFile", csFilters = list(...))}
 #'
 #' @return Character. The path to the downloaded ZIP file.
-#' @export
+#'
 #' @examples
 #' \dontrun{
 #'   my_payload <- list(hierarchies = list("H1"), format = "SingleCsvFile")
-#'   rdbes_download_data("https://api-url-here", my_payload)
+#'   rdbes_download_data(my_payload)
 #' }
 #'
-rdbes_download_data <- function(url, payload) {
+#' @importFrom httr POST GET add_headers content write_disk content_type_json
+#' @importFrom jsonlite toJSON
+#' @export
+rdbes_download_data <- function(payload) {
   # Get Token automatically
-  access_token <- rdbes_get_token()
+  access_token <- rdbes_token()
+
+  # load API URL from options
+  url <- getOption("rdbes.api_url")
 
   # Step 1: Create Job
-  res <- httr::POST(
+  res <- POST(
     url = url,
-    httr::add_headers(Authorization = paste("Bearer", access_token)),
-    body = jsonlite::toJSON(payload, auto_unbox = TRUE, null = "null"),
-    httr::content_type_json()
+    add_headers(Authorization = paste("Bearer", access_token)),
+    body = toJSON(payload, auto_unbox = TRUE, null = "null"),
+    content_type_json()
   )
   job_data <- rdbes_handle_response(res, "Create Export Job")
   job_id   <- job_data$id
@@ -37,7 +42,7 @@ rdbes_download_data <- function(url, payload) {
   message("Job ID: ", job_id, ". Polling for completion...")
   repeat {
     Sys.sleep(5)
-    res_status <- httr::GET(status_url, httr::add_headers(Authorization = paste("Bearer", access_token)))
+    res_status <- GET(status_url, add_headers(Authorization = paste("Bearer", access_token)))
     job_info <- rdbes_handle_response(res_status, "Check Status")
 
     if (job_info$status == "Completed") {
@@ -51,10 +56,10 @@ rdbes_download_data <- function(url, payload) {
 
   # Step 3: Download
   dest_file <- paste0("export_", job_id, ".zip")
-  res_dl <- httr::GET(
+  res_dl <- GET(
     url = paste0(url, "/", job_id, "/file"),
-    httr::add_headers(Authorization = paste("Bearer", access_token)),
-    httr::write_disk(dest_file, overwrite = TRUE)
+    add_headers(Authorization = paste("Bearer", access_token)),
+    write_disk(dest_file, overwrite = TRUE)
   )
   rdbes_handle_response(res_dl, "Download File", simplify = FALSE)
 

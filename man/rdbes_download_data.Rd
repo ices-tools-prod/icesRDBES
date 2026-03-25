@@ -4,11 +4,9 @@
 \alias{rdbes_download_data}
 \title{Download RDBES Data}
 \usage{
-rdbes_download_data(url, payload)
+rdbes_download_data(payload)
 }
 \arguments{
-\item{url}{Character. The RDBES API export URL (e.g., "https://rdbesapi.ices.dk/api/v1/export-jobs").}
-
 \item{payload}{List. The filter configuration including hierarchies, format, and filters.}
 }
 \value{
@@ -25,7 +23,7 @@ The payload should be a nested list. Example:
 \examples{
 \dontrun{
   my_payload <- list(hierarchies = list("H1"), format = "SingleCsvFile")
-  rdbes_download_data("https://api-url-here", my_payload)
+  rdbes_download_data(my_payload)
 }
 
 }
