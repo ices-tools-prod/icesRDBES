@@ -8,10 +8,8 @@ Authors@R:
     person("Colin", "Millar", role = c("aut", "cre"), email = "colin.millar@ices.dk")
   )
 Description: Tools to support the ICES Regional DataBase and Estimation System
-  (RDBEC) <https://sboxshiny.ices.dk/rdbescatalogue/> to access, analyse, and
+  (RDBES) <https://sboxshiny.ices.dk/rdbescatalogue/> to access, analyse, and
   process fisheries data collected under the EU Data Collection Framework.
-  ICES is an organization facilitating international collaboration in marine
-  science.
 License: file LICENSE
 URL: https://github.com/ices-tools-prod/icesRDBES
 Encoding: UTF-8
