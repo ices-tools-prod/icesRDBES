@@ -13,8 +13,15 @@
 #'
 #' @examples
 #' \dontrun{
-#'   my_payload <- list(hierarchies = list("H1"), format = "SingleCsvFile")
-#'   rdbes_download_data(my_payload)
+#' my_payload <- list(
+#'   format = "SingleCsvFile",
+#'   hierarchies = list("HSL"),
+#'   slFilters = list(
+#'     slCountry = list("ZW"),
+#'     slYear = list("2024")
+#'   )
+#' )
+#' rdbes_download_data(my_payload)
 #' }
 #'
 #' @importFrom httr POST GET add_headers content write_disk content_type_json
@@ -55,7 +62,8 @@ rdbes_download_data <- function(payload) {
   }
 
   # Step 3: Download
-  dest_file <- paste0("export_", job_id, ".zip")
+  dest_dir <- tempdir()
+  dest_file <- file.path(dest_dir, paste0("export_", job_id, ".zip"))
   res_dl <- GET(
     url = paste0(url, "/", job_id, "/file"),
     add_headers(Authorization = paste("Bearer", access_token)),
@@ -64,5 +72,6 @@ rdbes_download_data <- function(payload) {
   rdbes_handle_response(res_dl, "Download File", simplify = FALSE)
 
   message("Process finished. File saved: ", dest_file)
-  return(dest_file)
+
+  dest_file
 }

@@ -22,8 +22,15 @@ The payload should be a nested list. Example:
 }
 \examples{
 \dontrun{
-  my_payload <- list(hierarchies = list("H1"), format = "SingleCsvFile")
-  rdbes_download_data(my_payload)
+my_payload <- list(
+  format = "SingleCsvFile",
+  hierarchies = list("HSL"),
+  slFilters = list(
+    slCountry = list("ZW"),
+    slYear = list("2024")
+  )
+)
+rdbes_download_data(my_payload)
 }
 
 }
