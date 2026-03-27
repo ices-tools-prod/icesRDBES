@@ -4,6 +4,7 @@
 #' and downloads the resulting ZIP file to the current working directory.
 #'
 #' @param payload List. The filter configuration including hierarchies, format, and filters.
+#' @param dest_dir Character. Optional. Directory to save the downloaded file. Defaults to tempdir().
 #'
 #' @details
 #' The payload should be a nested list. Example:
@@ -27,12 +28,12 @@
 #' @importFrom httr POST GET add_headers content write_disk content_type_json
 #' @importFrom jsonlite toJSON
 #' @export
-rdbes_download_data <- function(payload) {
+rdbes_download_data <- function(payload, dest_dir = tempdir()) {
   # Get Token automatically
   access_token <- rdbes_token()
 
   # load API URL from options
-  url <- getOption("rdbes.api_url")
+  url <- rdbes_api()
 
   # Step 1: Create Job
   res <- POST(
@@ -62,7 +63,6 @@ rdbes_download_data <- function(payload) {
   }
 
   # Step 3: Download
-  dest_dir <- tempdir()
   dest_file <- file.path(dest_dir, paste0("export_", job_id, ".zip"))
   res_dl <- GET(
     url = paste0(url, "/", job_id, "/file"),

@@ -4,10 +4,12 @@
 \alias{rdbes_download_data}
 \title{Download RDBES Data}
 \usage{
-rdbes_download_data(payload)
+rdbes_download_data(payload, dest_dir = tempdir())
 }
 \arguments{
 \item{payload}{List. The filter configuration including hierarchies, format, and filters.}
+
+\item{dest_dir}{Character. Optional. Directory to save the downloaded file. Defaults to tempdir().}
 }
 \value{
 Character. The path to the downloaded ZIP file.
