@@ -16,7 +16,13 @@
         eval(parse(text = paste0("options(", i, "=", opts[i], ")")))
   }
 
-  packageStartupMessage("icesRDBES loaded and set to ", ifelse(getOption("rdbes.production"), "PRODUCTION", "DEVELOPMENT"), " mode. \nSee `?use_rdbes_development` to switch between development and production API endpoints.")
-
   invisible()
+}
+
+.onAttach <- function(libname, pkgname) {
+  packageStartupMessage(
+    "icesRDBES loaded and set to ",
+    ifelse(getOption("rdbes.production"), "PRODUCTION", "DEVELOPMENT"),
+    " mode. \nSee `?use_rdbes_development` to switch between development and production API endpoints."
+  )
 }
