@@ -9,7 +9,7 @@
 #' to access, analyse, and process fisheries data collected under the EU Data
 #' Collection Framework.
 #'
-#' @author Colin Millar and Arni Magnusson.
+#' @author Ejaz Muhammad and Colin Millar.
 #'
 #' @references
 #' ICES Regional DataBase and Estimation System: \url{https://sboxshiny.ices.dk/rdbescatalogue/}.

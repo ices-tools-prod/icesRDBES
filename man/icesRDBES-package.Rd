@@ -21,5 +21,5 @@ Useful links:
 
 }
 \author{
-Colin Millar and Arni Magnusson.
+Ejaz Muhammad and Colin Millar.
 }
