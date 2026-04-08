@@ -14,7 +14,7 @@ icesRDBES
 =========
 
 Tools to support the ICES Regional DataBase and Estimation System
-([RDBES](https://sboxshiny.ices.dk/rdbescatalogue/)) to access, analyse, and
+([RDBES](https://sboxrdbesapi.ices.dk/rdbescatalogue/)) to access, analyse, and
 process fisheries data collected under the EU Data Collection Framework.
 
 icesRDBES is implemented as an [R](https://www.r-project.org) package and
@@ -39,10 +39,19 @@ library(icesRDBES)
 ?icesRDBES
 ```
 
+You can only access RDBES data if you have an account and the necessary permissions. You can
+check your access by running the `decode_token` function, which fetches a token and allows you to see what is in it:
+```{r}
+library(icesRDBES)
+decoded_token <- decode_token()
+decoded_token[c("unique_name", "expiration")]
+```
+
 To download data from RDBES, you can use the `rdbes_download_data` function. For example:
 ```{r}
 library(icesRDBES)
-my_payload <- list(
+my_filter <- list(
+  dataType = "SL",
   format = "SingleCsvFile",
   hierarchies = list("HSL"),
   slFilters = list(
@@ -50,9 +59,87 @@ my_payload <- list(
     slYear = list("2024")
   )
 )
-rdbes_download_data(my_payload)
+rdbes_download_data(my_filter)
 ```
 
+The above example dowloads a zip file to your current working directory.
+
+A simple worflow could look like this:
+```{r}
+library(icesRDBES)
+# Define the filter for the data you want to download
+my_filter <- list(
+  dataType = "SL",
+  format = "SingleCsvFile",
+  hierarchies = list("HSL"),
+  slFilters = list(
+    slCountry = list("ZW"),
+    slYear = list("2024"),
+    includeDisclaimer = FALSE
+  )
+)
+
+# Download the data using the defined filter and save it to the specified directory
+zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
+
+# list the contents of the downloaded ZIP file
+unzip(zipfile, list = TRUE)
+
+# unzip into a folder called "rdbes" in the current working directory
+unzip(zipfile, exdir = "rdbes")
+
+# read in csv file
+# ...
+```
+
+```{r, include=FALSE}
+# Clean up the downloaded file and directory after the example
+unlink("rdbes", recursive = TRUE)
+```
+
+the icesRDBES package also provides predefined filters for each data type, which can be used to
+simplify the process of creating the filter list.
+
+```{r}
+library(icesRDBES)
+?type_filters
+names(type_filters)
+type_filters[["CE"]]
+```
+
+
+A more complex example using the predefined filters for each data type could look like this:
+```{r}
+library(icesRDBES)
+
+selected_type   <- "CL"              # Options: "CS", "CL", "CE", "SL", "VD"
+selected_format <- "SingleCsvFile"   # Options: "SingleCsvFile", "CsvFilePerTable"
+selected_filter <- type_filters[[selected_type]]
+
+# modify the filter here if needed, e.g. to add a species code filter
+selected_filter
+
+# 1. Initialize filter with constant parameters
+my_filter <-
+  c(
+    list(
+      dataType          = selected_type,
+      format            = selected_format,
+      includeDisclaimer = TRUE
+    ),
+    selected_filter
+  )
+
+# 3. Execute
+zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
+
+# list the contents of the downloaded ZIP file
+unzip(zipfile, list = TRUE)
+
+# list the contents of the downloaded ZIP file to local directory
+unzip(zipfile, exdir = "rdbes")
+hcl <- read.csv("rdbes/HCL.csv", header = FALSE)
+```
 
 Development
 -----------
