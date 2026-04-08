@@ -75,7 +75,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 014145ce-5bbd-43b8-9a0b-09caee6362e9. Polling for completion...
+    ## Job ID: 04cab180-a728-438f-aae8-f925c763d05e. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -83,9 +83,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_014145ce-5bbd-43b8-9a0b-09caee6362e9.zip
+    ## Process finished. File saved: ./export_04cab180-a728-438f-aae8-f925c763d05e.zip
 
-    ## [1] "./export_014145ce-5bbd-43b8-9a0b-09caee6362e9.zip"
+    ## [1] "./export_04cab180-a728-438f-aae8-f925c763d05e.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -115,7 +115,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: dbcbd52c-299f-4d40-b406-fd90fcc43772. Polling for completion...
+    ## Job ID: b98767c2-91be-40f8-9745-1f210678f08c. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -123,7 +123,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_dbcbd52c-299f-4d40-b406-fd90fcc43772.zip
+    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_b98767c2-91be-40f8-9745-1f210678f08c.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -131,8 +131,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-04-08 17:09:00
-    ## 2 Disclaimer.txt    810 2026-04-08 17:09:00
+    ## 1        HSL.csv      0 2026-04-08 17:12:00
+    ## 2 Disclaimer.txt    810 2026-04-08 17:12:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -141,6 +141,8 @@ unzip(zipfile, exdir = "rdbes")
 # read in csv file
 # ...
 ```
+
+### Using predefined filters
 
 the icesRDBES package also provides predefined filters for each data
 type, which can be used to simplify the process of creating the filter
@@ -231,7 +233,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: c71f74a2-7fc9-4acc-b605-5ad64cfbf425. Polling for completion...
+    ## Job ID: 23de2ccc-39fd-4b31-886e-14c6b4bcb09a. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -239,7 +241,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_c71f74a2-7fc9-4acc-b605-5ad64cfbf425.zip
+    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_23de2ccc-39fd-4b31-886e-14c6b4bcb09a.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -247,8 +249,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-04-08 17:09:00
-    ## 2 Disclaimer.txt    810 2026-04-08 17:09:00
+    ## 1        HCL.csv    898 2026-04-08 17:12:00
+    ## 2 Disclaimer.txt    810 2026-04-08 17:12:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory

@@ -115,6 +115,8 @@ unzip(zipfile, exdir = "rdbes")
 unlink("rdbes", recursive = TRUE)
 ```
 
+### Using predefined filters
+
 the icesRDBES package also provides predefined filters for each data type, which can be used to
 simplify the process of creating the filter list.
 
