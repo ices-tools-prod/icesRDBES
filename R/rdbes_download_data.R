@@ -4,7 +4,8 @@
 #' and downloads the resulting ZIP file to the current working directory.
 #'
 #' @param payload List. The filter configuration including hierarchies, format, and filters.
-#' @param dest_dir Character. Optional. Directory to save the downloaded file. Defaults to tempdir().
+#' @param dest_dir Character. Optional. Directory to save the downloaded file. Defaults to the current working directory.
+#' @param production Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").
 #'
 #' @details
 #' The payload should be a nested list. Example:
@@ -14,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' my_payload <- list(
+#' my_filters <- list(
 #'   format = "SingleCsvFile",
 #'   hierarchies = list("HSL"),
 #'   slFilters = list(
@@ -22,13 +23,13 @@
 #'     slYear = list("2024")
 #'   )
 #' )
-#' rdbes_download_data(my_payload)
+#' rdbes_download_data(my_filters, dest_dir = ".")
 #' }
 #'
 #' @importFrom httr POST GET add_headers content write_disk content_type_json
 #' @importFrom jsonlite toJSON
 #' @export
-rdbes_download_data <- function(payload, dest_dir = tempdir()) {
+rdbes_download_data <- function(payload, dest_dir = ".", production = getOption("rdbes.production"), verbose = FALSE) {
   # Get Token automatically
   access_token <- rdbes_token()
 
@@ -40,7 +41,8 @@ rdbes_download_data <- function(payload, dest_dir = tempdir()) {
     url = url,
     add_headers(Authorization = paste("Bearer", access_token)),
     body = toJSON(payload, auto_unbox = TRUE, null = "null"),
-    content_type_json()
+    content_type_json(),
+    if (verbose) httr::verbose() else NULL
   )
   job_data <- rdbes_handle_response(res, "Create Export Job")
   job_id   <- job_data$id
@@ -50,7 +52,12 @@ rdbes_download_data <- function(payload, dest_dir = tempdir()) {
   message("Job ID: ", job_id, ". Polling for completion...")
   repeat {
     Sys.sleep(5)
-    res_status <- GET(status_url, add_headers(Authorization = paste("Bearer", access_token)))
+    res_status <-
+      GET(
+        status_url,
+        add_headers(Authorization = paste("Bearer", access_token)),
+        if (verbose) httr::verbose() else NULL
+      )
     job_info <- rdbes_handle_response(res_status, "Check Status")
 
     if (job_info$status == "Completed") {
@@ -67,7 +74,8 @@ rdbes_download_data <- function(payload, dest_dir = tempdir()) {
   res_dl <- GET(
     url = paste0(url, "/", job_id, "/file"),
     add_headers(Authorization = paste("Bearer", access_token)),
-    write_disk(dest_file, overwrite = TRUE)
+    write_disk(dest_file, overwrite = TRUE),
+    if (verbose) httr::verbose() else NULL
   )
   rdbes_handle_response(res_dl, "Download File", simplify = FALSE)
 

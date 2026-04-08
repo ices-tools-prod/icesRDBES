@@ -4,12 +4,15 @@
 \alias{rdbes_download_data}
 \title{Download RDBES Data}
 \usage{
-rdbes_download_data(payload, dest_dir = tempdir())
+rdbes_download_data(payload, dest_dir = ".",
+  production = getOption("rdbes.production"), verbose = FALSE)
 }
 \arguments{
 \item{payload}{List. The filter configuration including hierarchies, format, and filters.}
 
-\item{dest_dir}{Character. Optional. Directory to save the downloaded file. Defaults to tempdir().}
+\item{dest_dir}{Character. Optional. Directory to save the downloaded file. Defaults to the current working directory.}
+
+\item{production}{Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").}
 }
 \value{
 Character. The path to the downloaded ZIP file.
@@ -24,7 +27,7 @@ The payload should be a nested list. Example:
 }
 \examples{
 \dontrun{
-my_payload <- list(
+my_filters <- list(
   format = "SingleCsvFile",
   hierarchies = list("HSL"),
   slFilters = list(
@@ -32,7 +35,7 @@ my_payload <- list(
     slYear = list("2024")
   )
 )
-rdbes_download_data(my_payload)
+rdbes_download_data(my_filters, dest_dir = ".")
 }
 
 }
