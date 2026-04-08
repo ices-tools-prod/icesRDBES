@@ -169,6 +169,16 @@ unlink("rdbes", recursive = TRUE)
 Development
 -----------
 
+To use the development database you need to run the following code before you download data:
+```{r}
+use_rdbes_development(TRUE)
+```
+
+and to switch back to the production database:
+```{r}
+use_rdbes_development(FALSE)
+```
+
 icesRDBES is developed openly on
 [GitHub](https://github.com/ices-tools-prod/icesRDBES).
 

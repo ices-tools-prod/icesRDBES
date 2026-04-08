@@ -75,7 +75,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 04cab180-a728-438f-aae8-f925c763d05e. Polling for completion...
+    ## Job ID: 28ffab96-5a69-443c-9e3a-0b0c85714adc. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -83,9 +83,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_04cab180-a728-438f-aae8-f925c763d05e.zip
+    ## Process finished. File saved: ./export_28ffab96-5a69-443c-9e3a-0b0c85714adc.zip
 
-    ## [1] "./export_04cab180-a728-438f-aae8-f925c763d05e.zip"
+    ## [1] "./export_28ffab96-5a69-443c-9e3a-0b0c85714adc.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -115,7 +115,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: b98767c2-91be-40f8-9745-1f210678f08c. Polling for completion...
+    ## Job ID: 61df0898-4190-41df-a016-6ebc8065ac76. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -123,7 +123,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_b98767c2-91be-40f8-9745-1f210678f08c.zip
+    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_61df0898-4190-41df-a016-6ebc8065ac76.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -131,8 +131,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-04-08 17:12:00
-    ## 2 Disclaimer.txt    810 2026-04-08 17:12:00
+    ## 1        HSL.csv      0 2026-04-08 17:16:00
+    ## 2 Disclaimer.txt    810 2026-04-08 17:16:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -233,7 +233,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 23de2ccc-39fd-4b31-886e-14c6b4bcb09a. Polling for completion...
+    ## Job ID: 322c5b02-60f6-4681-bda7-ec2516f0f895. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -241,7 +241,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_23de2ccc-39fd-4b31-886e-14c6b4bcb09a.zip
+    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_322c5b02-60f6-4681-bda7-ec2516f0f895.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -249,8 +249,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-04-08 17:12:00
-    ## 2 Disclaimer.txt    810 2026-04-08 17:12:00
+    ## 1        HCL.csv    898 2026-04-08 17:17:00
+    ## 2 Disclaimer.txt    810 2026-04-08 17:17:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
@@ -259,6 +259,23 @@ hcl <- read.csv("rdbes/HCL.csv", header = FALSE)
 ```
 
 ## Development
+
+To use the development database you need to run the following code
+before you download data:
+
+``` r
+use_rdbes_development(TRUE)
+```
+
+    ## Development mode is now ON. RDBES API URL set to: https://sboxrdbesapi.ices.dk/api/v1/export-jobs
+
+and to switch back to the production database:
+
+``` r
+use_rdbes_development(FALSE)
+```
+
+    ## Development mode is now OFF. RDBES API URL set to: https://rdbesapi.ices.dk/api/v1/export-jobs
 
 icesRDBES is developed openly on
 [GitHub](https://github.com/ices-tools-prod/icesRDBES).
