@@ -16,6 +16,7 @@
 #' @examples
 #' \dontrun{
 #' my_filters <- list(
+#'   dataType = "SL",
 #'   format = "SingleCsvFile",
 #'   hierarchies = list("HSL"),
 #'   slFilters = list(
@@ -23,7 +24,7 @@
 #'     slYear = list("2024")
 #'   )
 #' )
-#' rdbes_download_data(my_filters, dest_dir = ".")
+#' rdbes_download_data(my_filters)
 #' }
 #'
 #' @importFrom httr POST GET add_headers content write_disk content_type_json

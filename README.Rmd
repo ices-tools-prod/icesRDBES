@@ -39,6 +39,9 @@ library(icesRDBES)
 ?icesRDBES
 ```
 
+
+### Tokens
+
 You can only access RDBES data if you have an account and the necessary permissions. You can
 check your access by running the `decode_token` function, which fetches a token and allows you to see what is in it:
 ```{r}
@@ -47,7 +50,10 @@ decoded_token <- decode_token()
 decoded_token[c("unique_name", "expiration")]
 ```
 
+### Downloading data
+
 To download data from RDBES, you can use the `rdbes_download_data` function. For example:
+
 ```{r}
 library(icesRDBES)
 my_filter <- list(
@@ -62,9 +68,21 @@ my_filter <- list(
 rdbes_download_data(my_filter)
 ```
 
-The above example dowloads a zip file to your current working directory.
+```{r include=FALSE}
+# Clean up the downloaded file after the example
+zipfile <- list.files(pattern = "export_.*\\.zip")
+unlink(zipfile)
+```
 
-A simple worflow could look like this:
+The above example dowloads a zip file to your current working directory, the `rdbes_download_data`
+function returns the path to the downloaded file as a character string.
+
+
+Simple workflow examples
+-----
+
+A simple workflow could look like this:
+
 ```{r}
 library(icesRDBES)
 # Define the filter for the data you want to download
@@ -102,7 +120,7 @@ simplify the process of creating the filter list.
 
 ```{r}
 library(icesRDBES)
-?type_filters
+# see ?type_filters
 names(type_filters)
 type_filters[["CE"]]
 ```
@@ -139,6 +157,11 @@ unzip(zipfile, list = TRUE)
 # list the contents of the downloaded ZIP file to local directory
 unzip(zipfile, exdir = "rdbes")
 hcl <- read.csv("rdbes/HCL.csv", header = FALSE)
+```
+
+```{r, include=FALSE}
+# Clean up the downloaded file and directory after the example
+unlink("rdbes", recursive = TRUE)
 ```
 
 Development

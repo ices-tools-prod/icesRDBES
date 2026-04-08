@@ -36,6 +36,8 @@ library(icesRDBES)
 ?icesRDBES
 ```
 
+### Tokens
+
 You can only access RDBES data if you have an account and the necessary
 permissions. You can check your access by running the `decode_token`
 function, which fetches a token and allows you to see what is in it:
@@ -51,6 +53,8 @@ decoded_token[c("unique_name", "expiration")]
     ## 
     ## $expiration
     ## [1] "2026-04-08 15:47:46 UTC"
+
+### Downloading data
 
 To download data from RDBES, you can use the `rdbes_download_data`
 function. For example:
@@ -71,7 +75,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 9a8f9919-3815-4901-8606-461e9be0f45a. Polling for completion...
+    ## Job ID: 014145ce-5bbd-43b8-9a0b-09caee6362e9. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -79,13 +83,17 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_9a8f9919-3815-4901-8606-461e9be0f45a.zip
+    ## Process finished. File saved: ./export_014145ce-5bbd-43b8-9a0b-09caee6362e9.zip
 
-    ## [1] "./export_9a8f9919-3815-4901-8606-461e9be0f45a.zip"
+    ## [1] "./export_014145ce-5bbd-43b8-9a0b-09caee6362e9.zip"
 
-The above example dowloads a zip file to your current working directory.
+The above example dowloads a zip file to your current working directory,
+the `rdbes_download_data` function returns the path to the downloaded
+file as a character string.
 
-A simple worflow could look like this:
+## Simple workflow examples
+
+A simple workflow could look like this:
 
 ``` r
 library(icesRDBES)
@@ -107,7 +115,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 088cbb08-1d37-40a8-8786-f15d8891b246. Polling for completion...
+    ## Job ID: dbcbd52c-299f-4d40-b406-fd90fcc43772. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -115,7 +123,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_088cbb08-1d37-40a8-8786-f15d8891b246.zip
+    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_dbcbd52c-299f-4d40-b406-fd90fcc43772.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -123,8 +131,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-04-08 16:57:00
-    ## 2 Disclaimer.txt    810 2026-04-08 16:57:00
+    ## 1        HSL.csv      0 2026-04-08 17:09:00
+    ## 2 Disclaimer.txt    810 2026-04-08 17:09:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -140,12 +148,7 @@ list.
 
 ``` r
 library(icesRDBES)
-?type_filters
-```
-
-    ## ℹ Rendering development documentation for "type_filters"
-
-``` r
+# see ?type_filters
 names(type_filters)
 ```
 
@@ -228,7 +231,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 29d3ceb2-5a9f-41e6-8659-7c16619055b7. Polling for completion...
+    ## Job ID: c71f74a2-7fc9-4acc-b605-5ad64cfbf425. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -236,7 +239,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_29d3ceb2-5a9f-41e6-8659-7c16619055b7.zip
+    ## Process finished. File saved: /tmp/RtmpAfaNsW/export_c71f74a2-7fc9-4acc-b605-5ad64cfbf425.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -244,8 +247,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-04-08 16:58:00
-    ## 2 Disclaimer.txt    810 2026-04-08 16:58:00
+    ## 1        HCL.csv    898 2026-04-08 17:09:00
+    ## 2 Disclaimer.txt    810 2026-04-08 17:09:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory

@@ -28,6 +28,7 @@ The payload should be a nested list. Example:
 \examples{
 \dontrun{
 my_filters <- list(
+  dataType = "SL",
   format = "SingleCsvFile",
   hierarchies = list("HSL"),
   slFilters = list(
@@ -35,7 +36,7 @@ my_filters <- list(
     slYear = list("2024")
   )
 )
-rdbes_download_data(my_filters, dest_dir = ".")
+rdbes_download_data(my_filters)
 }
 
 }
