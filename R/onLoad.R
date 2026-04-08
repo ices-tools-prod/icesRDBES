@@ -9,7 +9,7 @@
       rdbes.resource   = "'api://18ab5ebb-1794-4e83-83f1-8fbd3dd5b152/rdbes.api.access'",
       rdbes.api_dev_url = "'https://sboxrdbesapi.ices.dk/api/v1/export-jobs'",
       rdbes.api_prod_url = "'https://rdbesapi.ices.dk/api/v1/export-jobs'",
-      rdbes.production = "FALSE"
+      rdbes.production = "TRUE"
     )
 
   for (i in setdiff(names(opts), names(options()))) {
