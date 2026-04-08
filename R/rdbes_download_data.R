@@ -6,6 +6,7 @@
 #' @param payload List. The filter configuration including hierarchies, format, and filters.
 #' @param dest_dir Character. Optional. Directory to save the downloaded file. Defaults to the current working directory.
 #' @param production Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").
+#' @param verbose Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.
 #'
 #' @details
 #' The payload should be a nested list. Example:
