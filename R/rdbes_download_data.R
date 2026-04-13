@@ -24,8 +24,7 @@
 #'   hierarchies = list("HSL"),
 #'   slFilters = list(
 #'     slCountry = list("ZW"),
-#'     slYear = list("2024"),
-#'     includeDisclaimer = TRUE
+#'     slYear = list("2024")
 #'   )
 #' )
 #' rdbes_download_data(my_filters)
@@ -40,6 +39,9 @@ rdbes_download_data <- function(payload, dest_dir = ".", production = getOption(
 
   # load API URL from options
   url <- rdbes_api()
+
+  # add includeDisclaimer to payload
+  payload$includeDisclaimer <- TRUE
 
   # Step 1: Create Job
   res <- POST(

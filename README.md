@@ -1,9 +1,8 @@
-[![CRAN
-Status](https://r-pkg.org/badges/version/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
-[![CRAN
-Monthly](https://cranlogs.r-pkg.org/badges/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
-[![CRAN
-Total](https://cranlogs.r-pkg.org/badges/grand-total/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
+<!--
+[![CRAN Status](https://r-pkg.org/badges/version/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
+[![CRAN Monthly](https://cranlogs.r-pkg.org/badges/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
+[![CRAN Total](https://cranlogs.r-pkg.org/badges/grand-total/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
+-->
 
 [<img align="right" alt="ICES Logo" height="40" src="https://www.ices.dk/_layouts/15/1033/images/icesimg/iceslogo.png">](https://www.ices.dk)
 
@@ -80,8 +79,6 @@ Every request must include these five core components:
 
 `format`: “SingleCsvFile” or “CsvFilePerTable”.
 
-`includeDisclaimer`: Must be TRUE.
-
 `hierarchies`: The specific hierarchy list for the data type.
 
 data type `filters`: The specific filter object for the data type
@@ -98,7 +95,6 @@ my_filter <- list(
   dataType = "SL",
   format = "SingleCsvFile",
   hierarchies = list("HSL"),
-  includeDisclaimer = TRUE,
   slFilters = list(
     slCountry = list("ZW"),
     slYear = list("2024")
@@ -109,7 +105,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: e29a5272-dfde-43e0-a42b-f900228d8f32. Polling for completion...
+    ## Job ID: 5370a912-c44b-4232-a75e-5bd1e8f57421. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -117,9 +113,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_e29a5272-dfde-43e0-a42b-f900228d8f32.zip
+    ## Process finished. File saved: ./export_5370a912-c44b-4232-a75e-5bd1e8f57421.zip
 
-    ## [1] "./export_e29a5272-dfde-43e0-a42b-f900228d8f32.zip"
+    ## [1] "./export_5370a912-c44b-4232-a75e-5bd1e8f57421.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -136,7 +132,6 @@ my_filter <- list(
   dataType = "SL",
   format = "SingleCsvFile",
   hierarchies = list("HSL"),
-  includeDisclaimer = TRUE,
   slFilters = list(
     slCountry = list("ZW"),
     slYear = list("2024")
@@ -149,7 +144,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: cbaa9995-0273-4fcc-af81-02056a44b270. Polling for completion...
+    ## Job ID: b26cfa6c-63f8-4df2-a4a9-138cc9d38b80. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -157,7 +152,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_cbaa9995-0273-4fcc-af81-02056a44b270.zip
+    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_b26cfa6c-63f8-4df2-a4a9-138cc9d38b80.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -165,8 +160,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-04-13 16:21:00
-    ## 2 Disclaimer.txt    810 2026-04-13 16:21:00
+    ## 1        HSL.csv      0 2026-04-13 16:35:00
+    ## 2 Disclaimer.txt    810 2026-04-13 16:35:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -255,8 +250,7 @@ my_filter <-
   c(
     list(
       dataType          = selected_type,
-      format            = selected_format,
-      includeDisclaimer = TRUE
+      format            = selected_format
     ),
     selected_filter
   )
@@ -267,7 +261,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 0eff69c6-41a9-4e21-9e17-477a5b50f256. Polling for completion...
+    ## Job ID: 49d23ca8-1aec-4818-8bc1-8d00c3f7580e. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -275,7 +269,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_0eff69c6-41a9-4e21-9e17-477a5b50f256.zip
+    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_49d23ca8-1aec-4818-8bc1-8d00c3f7580e.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -283,8 +277,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-04-13 16:21:00
-    ## 2 Disclaimer.txt    810 2026-04-13 16:21:00
+    ## 1        HCL.csv    898 2026-04-13 16:36:00
+    ## 2 Disclaimer.txt    810 2026-04-13 16:36:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
@@ -308,7 +302,6 @@ The payload is a list of parameters with the following structure:
 list(
   dataType          = string,
   format            = string,
-  includeDisclaimer = TRUE,
   hierarchies       = list(list of hierarchies),
   [datatype]Filters         = list([list of filters depending on the dataType])
 )
@@ -376,7 +369,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "CS",
   format            = " CsvFilePerTable ",
-  includeDisclaimer = TRUE,
   hierarchies       = list("H1", "H5", "H6", "H13"),
   csFilters         = list(
     sdCountry         = list("All"),  # Mandatory for Permissions
@@ -400,7 +392,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "CL",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HCL"),
   clFilters         = list(
     clVesselFlagCountry = list("All"), # Mandatory for Permissions
@@ -421,7 +412,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "CE",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HCE"),
   ceFilters         = list(
     ceVesselFlagCountry = list("All"), # Mandatory for Permissions
@@ -441,7 +431,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "SL",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HSL"),
   slFilters         = list(
     slCountry         = list("All"),  # Mandatory for Permissions
@@ -462,7 +451,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "VD",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HVD"),
   vdFilters         = list(
     vdCountry = list("All"),           # Mandatory for Permissions

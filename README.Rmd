@@ -3,10 +3,11 @@ output:
   md_document:
     variant: gfm
 ---
-
+<!--
 [![CRAN Status](https://r-pkg.org/badges/version/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
 [![CRAN Monthly](https://cranlogs.r-pkg.org/badges/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
 [![CRAN Total](https://cranlogs.r-pkg.org/badges/grand-total/icesRDBES)](https://cran.r-project.org/package=icesRDBES)
+-->
 
 [<img align="right" alt="ICES Logo" height="40" src="https://www.ices.dk/_layouts/15/1033/images/icesimg/iceslogo.png">](https://www.ices.dk)
 
@@ -75,8 +76,6 @@ Every request must include these five core components:
 
 `format`: "SingleCsvFile" or "CsvFilePerTable".
 
-`includeDisclaimer`: Must be TRUE.
-
 `hierarchies`: The specific hierarchy list for the data type.
 
 data type `filters`: The specific filter object for the data type (e.g. csFilters).
@@ -92,7 +91,6 @@ my_filter <- list(
   dataType = "SL",
   format = "SingleCsvFile",
   hierarchies = list("HSL"),
-  includeDisclaimer = TRUE,
   slFilters = list(
     slCountry = list("ZW"),
     slYear = list("2024")
@@ -123,7 +121,6 @@ my_filter <- list(
   dataType = "SL",
   format = "SingleCsvFile",
   hierarchies = list("HSL"),
-  includeDisclaimer = TRUE,
   slFilters = list(
     slCountry = list("ZW"),
     slYear = list("2024")
@@ -177,8 +174,7 @@ my_filter <-
   c(
     list(
       dataType          = selected_type,
-      format            = selected_format,
-      includeDisclaimer = TRUE
+      format            = selected_format
     ),
     selected_filter
   )
@@ -214,7 +210,6 @@ The payload is a list of parameters with the following structure:
 list(
   dataType          = string,
   format            = string,
-  includeDisclaimer = TRUE,
   hierarchies       = list(list of hierarchies),
   [datatype]Filters         = list([list of filters depending on the dataType])
 )
@@ -258,7 +253,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "CS",
   format            = " CsvFilePerTable ",
-  includeDisclaimer = TRUE,
   hierarchies       = list("H1", "H5", "H6", "H13"),
   csFilters         = list(
     sdCountry         = list("All"),  # Mandatory for Permissions
@@ -282,7 +276,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "CL",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HCL"),
   clFilters         = list(
     clVesselFlagCountry = list("All"), # Mandatory for Permissions
@@ -303,7 +296,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "CE",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HCE"),
   ceFilters         = list(
     ceVesselFlagCountry = list("All"), # Mandatory for Permissions
@@ -324,7 +316,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "SL",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HSL"),
   slFilters         = list(
     slCountry         = list("All"),  # Mandatory for Permissions
@@ -346,7 +337,6 @@ library(icesRDBES)
 my_payload <- list(
   dataType          = "VD",
   format            = "SingleCsvFile",
-  includeDisclaimer = TRUE,
   hierarchies       = list("HVD"),
   vdFilters         = list(
     vdCountry = list("All"),           # Mandatory for Permissions

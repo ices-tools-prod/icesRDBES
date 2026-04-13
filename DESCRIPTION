@@ -1,5 +1,5 @@
 Package: icesRDBES
-Version: 0.0.6
+Version: 0.0.7
 Title: Tools for the ICES Regional DataBase and Estimation System
 Authors@R:
   c(
