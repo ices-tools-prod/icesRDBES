@@ -83,7 +83,7 @@ data type `filters`: The specific filter object for the data type (e.g. csFilter
 
 ### Calling the API
 
-To download data from RDBES, you can use the `rdbes_download_data` function. For example:
+To download data from RDBES, you can use the [`rdbes_download_data`](https://ices-tools-prod.r-universe.dev/icesRDBES/doc/manual.html#rdbes_download_data)  function. For example:
 
 ```{r}
 library(icesRDBES)

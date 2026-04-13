@@ -86,7 +86,8 @@ data type `filters`: The specific filter object for the data type
 
 ### Calling the API
 
-To download data from RDBES, you can use the `rdbes_download_data`
+To download data from RDBES, you can use the
+[`rdbes_download_data`](https://ices-tools-prod.r-universe.dev/icesRDBES/doc/manual.html#rdbes_download_data)
 function. For example:
 
 ``` r
@@ -105,7 +106,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 5370a912-c44b-4232-a75e-5bd1e8f57421. Polling for completion...
+    ## Job ID: 335b5100-d3ab-4efe-ad2d-a2cd953aaae4. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -113,9 +114,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_5370a912-c44b-4232-a75e-5bd1e8f57421.zip
+    ## Process finished. File saved: ./export_335b5100-d3ab-4efe-ad2d-a2cd953aaae4.zip
 
-    ## [1] "./export_5370a912-c44b-4232-a75e-5bd1e8f57421.zip"
+    ## [1] "./export_335b5100-d3ab-4efe-ad2d-a2cd953aaae4.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -144,7 +145,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: b26cfa6c-63f8-4df2-a4a9-138cc9d38b80. Polling for completion...
+    ## Job ID: 15b9eee8-3764-4b3b-b5e9-c11aea5a763a. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -152,7 +153,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_b26cfa6c-63f8-4df2-a4a9-138cc9d38b80.zip
+    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_15b9eee8-3764-4b3b-b5e9-c11aea5a763a.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -160,8 +161,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-04-13 16:35:00
-    ## 2 Disclaimer.txt    810 2026-04-13 16:35:00
+    ## 1        HSL.csv      0 2026-04-13 16:39:00
+    ## 2 Disclaimer.txt    810 2026-04-13 16:39:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -261,7 +262,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 49d23ca8-1aec-4818-8bc1-8d00c3f7580e. Polling for completion...
+    ## Job ID: 91a01b7c-29ff-4f36-92b4-fde89ced8c0d. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -269,7 +270,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_49d23ca8-1aec-4818-8bc1-8d00c3f7580e.zip
+    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_91a01b7c-29ff-4f36-92b4-fde89ced8c0d.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -277,8 +278,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-04-13 16:36:00
-    ## 2 Disclaimer.txt    810 2026-04-13 16:36:00
+    ## 1        HCL.csv    898 2026-04-13 16:39:00
+    ## 2 Disclaimer.txt    810 2026-04-13 16:39:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
