@@ -35,7 +35,8 @@ my_filters <- list(
   hierarchies = list("HSL"),
   slFilters = list(
     slCountry = list("ZW"),
-    slYear = list("2024")
+    slYear = list("2024"),
+    includeDisclaimer = TRUE
   )
 )
 rdbes_download_data(my_filters)

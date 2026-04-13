@@ -12,6 +12,8 @@
 #' The payload should be a nested list. Example:
 #' \code{list(hierarchies = list("H1"), format = "SingleCsvFile", csFilters = list(...))}
 #'
+#'
+#'
 #' @return Character. The path to the downloaded ZIP file.
 #'
 #' @examples
@@ -22,7 +24,8 @@
 #'   hierarchies = list("HSL"),
 #'   slFilters = list(
 #'     slCountry = list("ZW"),
-#'     slYear = list("2024")
+#'     slYear = list("2024"),
+#'     includeDisclaimer = TRUE
 #'   )
 #' )
 #' rdbes_download_data(my_filters)
