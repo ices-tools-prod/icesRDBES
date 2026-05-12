@@ -52,12 +52,9 @@ fetches a token and allows you to see what is in it:
 ``` r
 library(icesRDBES)
 decoded_token <- decode_token()
-decoded_token[c("unique_name", "expiration")]
+decoded_token[c("expiration")]
 ```
 
-    ## $unique_name
-    ## [1] "colin.millar@ices.dk"
-    ## 
     ## $expiration
     ## [1] "2026-05-12 15:48:08 UTC"
 
@@ -77,8 +74,8 @@ Calling the API The API should be called by the following call:
 
 ``` r
   rdbes_upload_data(
-      file_path = [“pathAndFileNameToUpload”],
-      hierarchy = [“HCL” | “HCE” | “HCS” | “HSL” | “HVD” | “HNI” | “HEN” | “HSN”])
+      file_path = ["pathAndFileNameToUpload"],
+      hierarchy = ["HCL" | "HCE" | "HCS" | "HSL" | "HVD" | "HNI" | "HEN" | "HSN"])
 ```
 
 The rdbes_upload_data return a message (in your R working directory -
@@ -160,8 +157,8 @@ CEF data
 library(icesRDBES)
 
 result <- rdbes_upload_data(
-file_path = “D:\\support\\finalcheckstestfiles\\importtest_HNI.csv",
-hierarchy = “HNI”)
+file_path = "D:\\support\\finalcheckstestfiles\\importtest_HNI.csv",
+hierarchy = "HNI")
 ```
 
 Effort National (EN) example for upload of RDBES CEF data
@@ -170,8 +167,8 @@ Effort National (EN) example for upload of RDBES CEF data
 library(icesRDBES)
 
 result <- rdbes_upload_data(
-file_path = “D:\\support\\finalcheckstestfiles\\importtest_HEN.csv",
-hierarchy = “HEN”)
+file_path = "D:\\support\\finalcheckstestfiles\\importtest_HEN.csv",
+hierarchy = "HEN")
 ```
 
 Spatial National (SN) example for upload of RDBES CEF data
@@ -180,8 +177,8 @@ Spatial National (SN) example for upload of RDBES CEF data
 library(icesRDBES)
 
 result <- rdbes_upload_data(
-file_path = “D:\\support\\finalcheckstestfiles\\importtest_HSN.csv",
-hierarchy = “HSN”)
+file_path = "D:\\support\\finalcheckstestfiles\\importtest_HSN.csv",
+hierarchy = "HSN")
 ```
 
 Hierarchy 1 of the Commercial Sampling example for upload of RDBES data
@@ -190,8 +187,8 @@ Hierarchy 1 of the Commercial Sampling example for upload of RDBES data
 library(icesRDBES)
 
 result <- rdbes_upload_data(
-file_path = “D:\\support\\finalcheckstestfiles\\importtest_H1.csv",
-hierarchy = “H1”)
+file_path = "D:\\support\\finalcheckstestfiles\\importtest_H1.csv",
+hierarchy = "H1")
 ```
 
 # API rdbes_download_data
@@ -231,7 +228,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 4f7a96a1-3ba5-42cc-8095-a8368c3067f3. Polling for completion...
+    ## Job ID: ecae6644-5ab2-4892-9e39-38bfc5c4a812. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -239,9 +236,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_4f7a96a1-3ba5-42cc-8095-a8368c3067f3.zip
+    ## Process finished. File saved: ./export_ecae6644-5ab2-4892-9e39-38bfc5c4a812.zip
 
-    ## [1] "./export_4f7a96a1-3ba5-42cc-8095-a8368c3067f3.zip"
+    ## [1] "./export_ecae6644-5ab2-4892-9e39-38bfc5c4a812.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -270,7 +267,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 5f483d19-05f8-4f36-bbb4-049a59c87002. Polling for completion...
+    ## Job ID: 3ab1913c-f99f-4398-8827-a1571484efb1. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -278,7 +275,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpcffT75/export_5f483d19-05f8-4f36-bbb4-049a59c87002.zip
+    ## Process finished. File saved: /tmp/RtmpcffT75/export_3ab1913c-f99f-4398-8827-a1571484efb1.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -286,8 +283,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-05-12 16:24:00
-    ## 2 Disclaimer.txt    810 2026-05-12 16:24:00
+    ## 1        HSL.csv      0 2026-05-12 16:28:00
+    ## 2 Disclaimer.txt    810 2026-05-12 16:28:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -387,7 +384,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: aa101264-d8f0-4579-b8d0-5fb8eafb31d1. Polling for completion...
+    ## Job ID: 467b2820-1c07-43aa-97ad-ad921b5a6369. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -395,7 +392,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpcffT75/export_aa101264-d8f0-4579-b8d0-5fb8eafb31d1.zip
+    ## Process finished. File saved: /tmp/RtmpcffT75/export_467b2820-1c07-43aa-97ad-ad921b5a6369.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -403,8 +400,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-05-12 16:24:00
-    ## 2 Disclaimer.txt    810 2026-05-12 16:24:00
+    ## 1        HCL.csv    898 2026-05-12 16:28:00
+    ## 2 Disclaimer.txt    810 2026-05-12 16:28:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
@@ -502,8 +499,8 @@ my_payload <- list(
     # deSamplingScheme  = list(),       # Available Optional Filter
     # deStratumName     = list(),     # Available Optional Filter
     # saSpeciesCode     = list(),       # Available Optional Filter
-    # foArea            = list(“27.2.a”, “27.8.a”),       # Available Optional Filter
-    # leArea            = list(“27.2.a”, “27.8.a”)        # Available Optional Filter
+    # foArea            = list("27.2.a", "27.8.a"),       # Available Optional Filter
+    # leArea            = list("27.2.a", "27.8.a")        # Available Optional Filter
   )
 )
 
