@@ -471,12 +471,12 @@ Development
 -----------
 
 To use the development database you need to run the following code before you download data:
-```{r}
+```{r, eval = FALSE}
 use_sboxrdbes(TRUE)
 ```
 
 and to switch back to the production database:
-```{r}
+```{r, eval = FALSE}
 use_sboxrdbes(FALSE)
 ```
 

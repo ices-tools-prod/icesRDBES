@@ -39,16 +39,6 @@ library(icesRDBES)
 ?icesRDBES
 ```
 
-## API Endpoints
-
-The API endpoint “api_url” for the RDBES is:
-
-RDBES: <https://rdbesapi.ices.dk/api/v1/export-jobs>
-
-For RDBES Test system called SboxRDBES the API endpoint is:
-
-Test system for RDBES: <https://sboxrdbesapi.ices.dk/api/v1/export-jobs>
-
 ### Core Security & Permissions
 
 When calling the API (rdbes_download_data) for the first time
@@ -69,11 +59,146 @@ decoded_token[c("unique_name", "expiration")]
     ## [1] "colin.millar@ices.dk"
     ## 
     ## $expiration
-    ## [1] "2026-04-13 15:25:30 UTC"
+    ## [1] "2026-05-12 15:48:08 UTC"
+
+# APIs in the package icesRDBES
+
+There are two APIs to call: - rdbes_upload_data - rdbes_download_data
+
+The rdbes_upload_data API will screen and upload CEF data. The
+rdbes_download_data API will download detailed RDBES data. Each API will
+be describe in the following sections - one section for each API.
+
+# API rdbes_upload_data
+
+The rdbes_upload_data API can screen and upload CEF data
+
+Calling the API The API should be called by the following call:
+
+``` r
+  rdbes_upload_data(
+      file_path = [“pathAndFileNameToUpload”],
+      hierarchy = [“HCL” | “HCE” | “HCS” | “HSL” | “HVD” | “HNI” | “HEN” | “HSN”])
+```
+
+The rdbes_upload_data return a message (in your R working directory -
+typically the return file also opens automatically in R studio), which
+can be successful for screening and uploading of data or an error report
+for the failed checks. For successful screening and data upload an email
+will be sent. For failure an email will not be sent, see the returned
+message and potentially error file in json format.
+
+## Examples of return messages
+
+### Examples of a message for a successful screening and data upload
+
+    --- Step 1: Uploading ---
+    >> Upload successful.
+    --- Step 2: Starting Screening ---
+    --- Step 3: Monitoring Progress ---
+    [14:09:45] Status: Queued
+    [14:09:48] Status: Processing
+    [14:09:51] Status: Processing
+    [14:09:55] Status: Processing
+    [14:09:58] Status: Completed
+    --- Step 3.5: Downloading Reordered File ---
+    >> Reordered file saved: D:/TAF/RStudio/Testttt/reordered_2026_5_11_14_9_45_155_Importtest_HNI.csv
+    >> Screening Passed.
+    --- Step 5: Finalizing Import ---
+    >> SUCCESS: You have successfully screened your file:Importtest_HNI.csv.Your file will now be imported and you will receive an email notification upon completion of the import process.
+
+The email is from <No-Reply-RDBES-info@ices.dk>, with subject: File
+upload to the RDBES system passed screening.
+
+### Examples of a message for a failed screening and data upload
+
+    --- Step 1: Uploading ---
+    >> Upload successful.
+    --- Step 2: Starting Screening ---
+    --- Step 3: Monitoring Progress ---
+    [14:16:22] Status: Processing
+    [14:16:25] Status: Processing
+    [14:16:28] Status: Processing
+    [14:16:31] Status: Failed
+    --- Step 3.5: Downloading Reordered File ---
+    >> Reordered file saved: D:/TAF/RStudio/Testttt/reordered_2026_5_11_14_16_22_327_SOPchecktest_noWeight_HNI.csv
+    --- Step 4: Downloading Error Report ---
+    !! SCREENING FAILED. Report: D:/TAF/RStudio/Testttt/Screening_Report_54f91447-285e-4fce-b3a3-7553bc95edd1.json
+
+Browse to the Screening_Report file and open it
+
+``` json
+{
+  "IsValid": false,
+  "Message": " At least 1 set-based errors found. Note that a maximum of 100 errors are being reported at once.",
+  "Result": [
+    {
+      "RecordType": "CN",
+      "Errors": [
+        {
+          "LN": "1",
+          "FieldName": "CNtotal",
+          "FoundValue": "980",
+          "Message": "total is > 120 % SOP or total is < 80 % SOP for 127150 (speciesCode) bll.27.3a47de (stock). Distribution Type: Age (distributionType).",
+          "RuleContext": "SOP Sum: 155407.16 kg | Parent Group Total: 980 t -> 980000.00 kg | Ratio: 0.16 (15.9%)"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Examples of calling the API for data upload
+
+In the following there is given an example of a call to the RDBES API
+for three RDBES CEF data type “HNI”, “HEN”, and “HSN” and one example
+for the RDBES “HCS”. National Information (NI), which consist of Catch
+National (CN) and Distribution National (DN) example for upload of RDBES
+CEF data
+
+``` r
+library(icesRDBES)
+
+result <- rdbes_upload_data(
+file_path = “D:\\support\\finalcheckstestfiles\\importtest_HNI.csv",
+hierarchy = “HNI”)
+```
+
+Effort National (EN) example for upload of RDBES CEF data
+
+``` r
+library(icesRDBES)
+
+result <- rdbes_upload_data(
+file_path = “D:\\support\\finalcheckstestfiles\\importtest_HEN.csv",
+hierarchy = “HEN”)
+```
+
+Spatial National (SN) example for upload of RDBES CEF data
+
+``` r
+library(icesRDBES)
+
+result <- rdbes_upload_data(
+file_path = “D:\\support\\finalcheckstestfiles\\importtest_HSN.csv",
+hierarchy = “HSN”)
+```
+
+Hierarchy 1 of the Commercial Sampling example for upload of RDBES data
+
+``` r
+library(icesRDBES)
+
+result <- rdbes_upload_data(
+file_path = “D:\\support\\finalcheckstestfiles\\importtest_H1.csv",
+hierarchy = “H1”)
+```
+
+# API rdbes_download_data
 
 ### Mandatory Request Object Fields
 
-Every request must include these five core components:
+Every request must include these four core components:
 
 `dataType`: “CS”, “CL”, “CE”, “SL”, or “VD”.
 
@@ -106,7 +231,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 335b5100-d3ab-4efe-ad2d-a2cd953aaae4. Polling for completion...
+    ## Job ID: 4f7a96a1-3ba5-42cc-8095-a8368c3067f3. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -114,9 +239,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_335b5100-d3ab-4efe-ad2d-a2cd953aaae4.zip
+    ## Process finished. File saved: ./export_4f7a96a1-3ba5-42cc-8095-a8368c3067f3.zip
 
-    ## [1] "./export_335b5100-d3ab-4efe-ad2d-a2cd953aaae4.zip"
+    ## [1] "./export_4f7a96a1-3ba5-42cc-8095-a8368c3067f3.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -145,7 +270,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 15b9eee8-3764-4b3b-b5e9-c11aea5a763a. Polling for completion...
+    ## Job ID: 5f483d19-05f8-4f36-bbb4-049a59c87002. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -153,7 +278,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_15b9eee8-3764-4b3b-b5e9-c11aea5a763a.zip
+    ## Process finished. File saved: /tmp/RtmpcffT75/export_5f483d19-05f8-4f36-bbb4-049a59c87002.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -161,8 +286,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-04-13 16:39:00
-    ## 2 Disclaimer.txt    810 2026-04-13 16:39:00
+    ## 1        HSL.csv      0 2026-05-12 16:24:00
+    ## 2 Disclaimer.txt    810 2026-05-12 16:24:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -262,7 +387,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 91a01b7c-29ff-4f36-92b4-fde89ced8c0d. Polling for completion...
+    ## Job ID: aa101264-d8f0-4579-b8d0-5fb8eafb31d1. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -270,7 +395,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpBQcqTJ/export_91a01b7c-29ff-4f36-92b4-fde89ced8c0d.zip
+    ## Process finished. File saved: /tmp/RtmpcffT75/export_aa101264-d8f0-4579-b8d0-5fb8eafb31d1.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -278,8 +403,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-04-13 16:39:00
-    ## 2 Disclaimer.txt    810 2026-04-13 16:39:00
+    ## 1        HCL.csv    898 2026-05-12 16:24:00
+    ## 2 Disclaimer.txt    810 2026-05-12 16:24:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
@@ -468,18 +593,14 @@ To use the development database you need to run the following code
 before you download data:
 
 ``` r
-use_rdbes_development(TRUE)
+use_sboxrdbes(TRUE)
 ```
-
-    ## Development mode is now ON. RDBES API URL set to: https://sboxrdbesapi.ices.dk/api/v1/export-jobs
 
 and to switch back to the production database:
 
 ``` r
-use_rdbes_development(FALSE)
+use_sboxrdbes(FALSE)
 ```
-
-    ## Development mode is now OFF. RDBES API URL set to: https://rdbesapi.ices.dk/api/v1/export-jobs
 
 icesRDBES is developed openly on
 [GitHub](https://github.com/ices-tools-prod/icesRDBES).
