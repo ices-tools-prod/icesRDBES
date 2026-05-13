@@ -17,6 +17,7 @@
 #' result <- rdbes_upload_data(file_path = filename, hierarchy = "HNI")
 #' }
 #'
+#' @importFrom utils URLencode
 #' @export
 rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbes.production"), verbose = FALSE) {
   if (!file.exists(file_path)) stop(paste("Local file not found:", file_path))
@@ -25,16 +26,17 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
   access_token <- rdbes_token()
 
   # load API URL from options
-  url <- paste0(rdbes_api(production = production), "/api/Upload/UploadFile")
+  api_root_url <- rdbes_api(production = production)
 
+  # useful request components
   headers <- httr::add_headers(Authorization = paste("Bearer", access_token))
   long_timeout <- httr::timeout(600)
 
   # 1. Upload
   message("\n--- Step 1: Uploading ---")
-  
+
   res_up <- httr::POST(
-    url = url,
+    url = paste0(api_root_url, "/api/Upload/UploadFile"),
     headers, long_timeout,
     body = list(File = httr::upload_file(file_path), isSLTobeConverted = "false"),
     encode = "multipart"
