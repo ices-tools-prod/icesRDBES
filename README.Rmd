@@ -149,15 +149,15 @@ Browse to the Screening_Report file and open it
 
 ### Examples of calling the API for data upload
 In the following there is given an example of a call to the RDBES API for three RDBES CEF data type "HNI", "HEN", and "HSN" and one example for the RDBES "HCS".
+
 National Information (NI), which consist of Catch National (CN) and Distribution National (DN) example for upload of RDBES CEF data
 
-```r
+```{r, eval = FALSE}
 library(icesRDBES)
 
 # test file incliuded in the package
 filename <- system.file("test_files/importtest_HNI.csv", package = "icesRDBES")
-
-result <- rdbes_upload_data(file_path = filename, hierarchy = "HNI")
+result <- rdbes_upload_data(filename, hierarchy = "HNI")
 ```
 
 Effort National (EN) example for upload of RDBES CEF data

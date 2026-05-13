@@ -30,7 +30,7 @@
 #' rdbes_download_data(my_filters)
 #' }
 #'
-#' @importFrom httr POST GET add_headers content write_disk content_type_json
+#' @importFrom httr POST GET add_headers content write_disk content_type_json verbose
 #' @importFrom jsonlite toJSON
 #' @export
 rdbes_download_data <- function(payload, dest_dir = ".", production = getOption("rdbes.production"), verbose = FALSE) {
@@ -38,7 +38,7 @@ rdbes_download_data <- function(payload, dest_dir = ".", production = getOption(
   access_token <- rdbes_token()
 
   # load API URL from options
-  url <- paste0(rdbes_api(production = production), "/api/v1/export-jobs")
+  url <- paste0(rdbes_api(production = production, type = "download"), "/api/v1/export-jobs")
 
   # add includeDisclaimer to payload
   payload$includeDisclaimer <- TRUE
@@ -49,7 +49,7 @@ rdbes_download_data <- function(payload, dest_dir = ".", production = getOption(
     add_headers(Authorization = paste("Bearer", access_token)),
     body = toJSON(payload, auto_unbox = TRUE, null = "null"),
     content_type_json(),
-    if (verbose) httr::verbose() else NULL
+    if (verbose) verbose() else NULL
   )
   job_data <- rdbes_handle_response(res, "Create Export Job")
   job_id   <- job_data$id
@@ -63,7 +63,7 @@ rdbes_download_data <- function(payload, dest_dir = ".", production = getOption(
       GET(
         status_url,
         add_headers(Authorization = paste("Bearer", access_token)),
-        if (verbose) httr::verbose() else NULL
+        if (verbose) verbose() else NULL
       )
     job_info <- rdbes_handle_response(res_status, "Check Status")
 
@@ -82,7 +82,7 @@ rdbes_download_data <- function(payload, dest_dir = ".", production = getOption(
     url = paste0(url, "/", job_id, "/file"),
     add_headers(Authorization = paste("Bearer", access_token)),
     write_disk(dest_file, overwrite = TRUE),
-    if (verbose) httr::verbose() else NULL
+    if (verbose) verbose() else NULL
   )
   rdbes_handle_response(res_dl, "Download File", simplify = FALSE)
 

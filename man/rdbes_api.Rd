@@ -4,10 +4,13 @@
 \alias{rdbes_api}
 \title{Get the current API URL based on the environment}
 \usage{
-rdbes_api(production = getOption("rdbes.production"))
+rdbes_api(production = getOption("rdbes.production"), type = c("upload",
+  "download"))
 }
 \arguments{
 \item{production}{Logical. If TRUE, returns the production API URL. If FALSE, returns the development API URL.}
+
+\item{type}{Character. The type of API URL to return, either "upload" or "download". Defaults to "upload".}
 }
 \value{
 A character string representing the API URL.

@@ -7,8 +7,10 @@
       rdbes.tenant_id  = "'e0b220ce-5735-4468-91df-05cae5ff1fdc'",
       rdbes.client_app = "'b6347a7e-5f73-463a-81b1-3781d163de19'",
       rdbes.resource   = "'api://18ab5ebb-1794-4e83-83f1-8fbd3dd5b152/rdbes.api.access'",
-      rdbes.api_dev_url = "'https://sboxrdbesapi.ices.dk'",
-      rdbes.api_prod_url = "'https://rdbesapi.ices.dk'",
+      rdbes.api_sbox_upload_url = "'https://sboxrdbes.ices.dk'",
+      rdbes.api_sbox_download_url = "'https://sboxrdbesapi.ices.dk'",
+      rdbes.api_prod_upload_url = "'https://rdbes.ices.dk'",
+      rdbes.api_prod_download_url = "'https://rdbesapi.ices.dk'",
       rdbes.production = "TRUE"
     )
 
