@@ -55,6 +55,9 @@ You can check your access by running the `decode_token` function, which fetches 
 library(icesRDBES)
 decoded_token <- decode_token()
 decoded_token[c("expiration")]
+
+# you can directly access the token with rdbes_token()
+token <- rdbes_token(quiet = FALSE) # quiet=FALSE will also print the token inventory check messages
 ```
 
 # APIs in the package icesRDBES
@@ -471,12 +474,12 @@ Development
 -----------
 
 To use the development database you need to run the following code before you download data:
-```{r, eval = FALSE}
+```{r}
 use_sboxrdbes(TRUE)
 ```
 
 and to switch back to the production database:
-```{r, eval = FALSE}
+```{r}
 use_sboxrdbes(FALSE)
 ```
 

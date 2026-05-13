@@ -4,6 +4,8 @@
 #'
 #' @param invisible Logical. If TRUE (default), the token is returned invisibly
 #'                           to avoid printing it in the console.
+#' @param quiet Logical. If TRUE (default), suppresses the token inventory
+#'                       check messages.
 #'
 #' @return Character. The access token string.
 #'
@@ -16,16 +18,18 @@
 #'
 #' @importFrom AzureAuth get_azure_token
 #' @export
-rdbes_token <- function(invisible = TRUE) {
+rdbes_token <- function(invisible = TRUE, quiet = TRUE) {
   az <-
     suppressMessages(
       get_azure_token(
-        resource = getOption("rdbes.resource"),
+        resource = c(getOption("rdbes.resource"), "openid", "offline_access"),
         tenant = getOption("rdbes.tenant_id"),
         app = getOption("rdbes.client_app"),
         version = 2
       )
     )
+
+  if (!quiet) token_inventory_check(az)
 
   if (invisible) {
     invisible(az$credentials$access_token)

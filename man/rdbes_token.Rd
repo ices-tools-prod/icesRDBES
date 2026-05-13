@@ -4,11 +4,14 @@
 \alias{rdbes_token}
 \title{Get a Token to Download RDBES Data}
 \usage{
-rdbes_token(invisible = TRUE)
+rdbes_token(invisible = TRUE, quiet = TRUE)
 }
 \arguments{
 \item{invisible}{Logical. If TRUE (default), the token is returned invisibly
 to avoid printing it in the console.}
+
+\item{quiet}{Logical. If TRUE (default), suppresses the token inventory
+check messages.}
 }
 \value{
 Character. The access token string.

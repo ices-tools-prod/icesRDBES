@@ -56,7 +56,22 @@ decoded_token[c("expiration")]
 ```
 
     ## $expiration
-    ## [1] "2026-05-12 15:48:08 UTC"
+    ## [1] "2026-05-13 12:33:01 UTC"
+
+``` r
+# you can directly access the token with rdbes_token()
+token <- rdbes_token(quiet = FALSE) # quiet=FALSE will also print the token inventory check messages
+```
+
+    ## --- 🔍 Token Inventory Check ---
+
+    ## 🔑 Access Token is PRESENT
+
+    ## 🔄 Refresh Token is PRESENT
+
+    ## 🆔 ID Token is PRESENT
+
+    ## --------------------------------
 
 # APIs in the package icesRDBES
 
@@ -228,7 +243,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: ecae6644-5ab2-4892-9e39-38bfc5c4a812. Polling for completion...
+    ## Job ID: ebaeb9f9-b932-4eee-9871-b8cff5cb6383. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -236,9 +251,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_ecae6644-5ab2-4892-9e39-38bfc5c4a812.zip
+    ## Process finished. File saved: ./export_ebaeb9f9-b932-4eee-9871-b8cff5cb6383.zip
 
-    ## [1] "./export_ecae6644-5ab2-4892-9e39-38bfc5c4a812.zip"
+    ## [1] "./export_ebaeb9f9-b932-4eee-9871-b8cff5cb6383.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -267,7 +282,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 3ab1913c-f99f-4398-8827-a1571484efb1. Polling for completion...
+    ## Job ID: 75b9ce1b-f47a-4878-831b-0e753db54ddf. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -275,7 +290,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpcffT75/export_3ab1913c-f99f-4398-8827-a1571484efb1.zip
+    ## Process finished. File saved: /tmp/RtmpF47iyo/export_75b9ce1b-f47a-4878-831b-0e753db54ddf.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -283,8 +298,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-05-12 16:28:00
-    ## 2 Disclaimer.txt    810 2026-05-12 16:28:00
+    ## 1        HSL.csv      0 2026-05-13 13:36:00
+    ## 2 Disclaimer.txt    810 2026-05-13 13:36:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -384,7 +399,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 467b2820-1c07-43aa-97ad-ad921b5a6369. Polling for completion...
+    ## Job ID: 54d1e521-1aa1-4fc0-83dd-6a000df1d798. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -392,7 +407,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpcffT75/export_467b2820-1c07-43aa-97ad-ad921b5a6369.zip
+    ## Process finished. File saved: /tmp/RtmpF47iyo/export_54d1e521-1aa1-4fc0-83dd-6a000df1d798.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -400,8 +415,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-05-12 16:28:00
-    ## 2 Disclaimer.txt    810 2026-05-12 16:28:00
+    ## 1        HCL.csv    898 2026-05-13 13:36:00
+    ## 2 Disclaimer.txt    810 2026-05-13 13:36:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
@@ -593,11 +608,15 @@ before you download data:
 use_sboxrdbes(TRUE)
 ```
 
+    ## Sandbox/develpment mode is now ON. RDBES API URL set to: https://sboxrdbesapi.ices.dk/api/v1/export-jobs
+
 and to switch back to the production database:
 
 ``` r
 use_sboxrdbes(FALSE)
 ```
+
+    ## Sandbox/develpment mode is now OFF. RDBES API URL set to: https://rdbesapi.ices.dk/api/v1/export-jobs
 
 icesRDBES is developed openly on
 [GitHub](https://github.com/ices-tools-prod/icesRDBES).

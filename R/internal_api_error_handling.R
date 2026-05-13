@@ -2,7 +2,7 @@
 #' @importFrom httr status_code http_status content
 #' @importFrom jsonlite fromJSON toJSON
 
-# 2. Internal Helper: Error Handling
+# used in rdbes_donload_data
 rdbes_handle_response <- function(res, step_name, simplify = TRUE) {
   status      <- status_code(res)
   status_text <- http_status(status)$reason  # Converts 400 to "Bad Request"
@@ -20,4 +20,25 @@ rdbes_handle_response <- function(res, step_name, simplify = TRUE) {
 
   # Final stop message combining Code, Text, and Category
   stop(sprintf("\n--- RDBES API ERROR ---\nStep: %s\nStatus: %d %s (%s)\nResponse: %s", step_name, status, status_text, category, err_body), call. = FALSE)
+}
+
+
+# used in rdbes_upload_data
+rdbes_handle_status <- function(res) {
+  code <- httr::status_code(res)
+  content_raw <- httr::content(res, as = "text", encoding = "UTF-8")
+  content <- if (content_raw != "") jsonlite::fromJSON(content_raw) else list()
+
+  if (code >= 200 && code < 300) {
+    return(content)
+  } else {
+    err_msg <- "An unknown error occurred."
+    if (is.list(content)) {
+      err_msg <- if(!is.null(content$Message)) content$Message
+      else if(!is.null(content$message)) content$message
+      else if(!is.null(content$error)) content$error
+      else "Unknown API Error"
+    }
+    stop(paste0("[Error ", code, "]: ", err_msg))
+  }
 }
