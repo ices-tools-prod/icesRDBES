@@ -164,16 +164,16 @@ Browse to the Screening_Report file and open it
 
 In the following there is given an example of a call to the RDBES API
 for three RDBES CEF data type “HNI”, “HEN”, and “HSN” and one example
-for the RDBES “HCS”. National Information (NI), which consist of Catch
-National (CN) and Distribution National (DN) example for upload of RDBES
-CEF data
+for the RDBES “HCS”.
+
+National Information (NI), which consist of Catch National (CN) and
+Distribution National (DN) example for upload of RDBES CEF data
 
 ``` r
 library(icesRDBES)
 
 # test file incliuded in the package
 filename <- system.file("test_files/importtest_HNI.csv", package = "icesRDBES")
-
 result <- rdbes_upload_data(filename, hierarchy = "HNI")
 ```
 
@@ -244,7 +244,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: eb09cec3-0050-4384-904e-de8fce7373ad. Polling for completion...
+    ## Job ID: ea7eb22c-e7c9-41cd-975c-144fc94c34e3. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -252,9 +252,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_eb09cec3-0050-4384-904e-de8fce7373ad.zip
+    ## Process finished. File saved: ./export_ea7eb22c-e7c9-41cd-975c-144fc94c34e3.zip
 
-    ## [1] "./export_eb09cec3-0050-4384-904e-de8fce7373ad.zip"
+    ## [1] "./export_ea7eb22c-e7c9-41cd-975c-144fc94c34e3.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -283,7 +283,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: eca070fe-de76-4205-8477-5088c993236e. Polling for completion...
+    ## Job ID: 1699b70b-4042-47fc-a947-08b80ecae3fd. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -291,7 +291,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpCIITOH/export_eca070fe-de76-4205-8477-5088c993236e.zip
+    ## Process finished. File saved: /tmp/RtmpCIITOH/export_1699b70b-4042-47fc-a947-08b80ecae3fd.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -299,8 +299,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-05-13 14:38:00
-    ## 2 Disclaimer.txt    810 2026-05-13 14:38:00
+    ## 1        HSL.csv      0 2026-05-13 15:00:00
+    ## 2 Disclaimer.txt    810 2026-05-13 15:00:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -400,7 +400,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 3bcb27ff-a4e4-49bc-8e6a-f39799078194. Polling for completion...
+    ## Job ID: 53ba1f77-d100-4b89-900b-9ba7b8970c13. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -408,7 +408,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpCIITOH/export_3bcb27ff-a4e4-49bc-8e6a-f39799078194.zip
+    ## Process finished. File saved: /tmp/RtmpCIITOH/export_53ba1f77-d100-4b89-900b-9ba7b8970c13.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -416,8 +416,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-05-13 14:38:00
-    ## 2 Disclaimer.txt    810 2026-05-13 14:38:00
+    ## 1        HCL.csv    898 2026-05-13 15:00:00
+    ## 2 Disclaimer.txt    810 2026-05-13 15:00:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
