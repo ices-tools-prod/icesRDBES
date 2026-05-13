@@ -1,21 +1,45 @@
-
+#' Upload RDBES Data
+#'
+#' This function authenticates with Azure, uploads a file, starts a screening job, polls for completion,
+#' and downloads the resulting reordered file if available.
+#'
+#' @param file_path Character. The path to the file to upload.
+#' @param hierarchy Character. The hierarchy type for the upload.
+#' @param production Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").
+#' @param verbose Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.
+#'
+#' @return Character. The path to the downloaded ZIP file.
+#'
+#' @examples
+#' \dontrun{
+#' filename <- system.file("test_files/importtest_HNI.csv", package = "icesRDBES")
+#'
+#' result <- rdbes_upload_data(file_path = filename, hierarchy = "HNI")
+#' }
+#'
 #' @export
-rdbes_upload_data <- function(api_root_url, file_path, hierarchy) {
+rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbes.production"), verbose = FALSE) {
   if (!file.exists(file_path)) stop(paste("Local file not found:", file_path))
 
-  access_token <- rdbes_get_token()
+  # Get Token automatically
+  access_token <- rdbes_token()
+
+  # load API URL from options
+  url <- paste0(rdbes_api(production = production), "/api/Upload/UploadFile")
+
   headers <- httr::add_headers(Authorization = paste("Bearer", access_token))
-  api_root_url <- trimws(sub("/$", "", api_root_url))
   long_timeout <- httr::timeout(600)
 
   # 1. Upload
   message("\n--- Step 1: Uploading ---")
+  
   res_up <- httr::POST(
-    url = paste0(api_root_url, "/api/Upload/UploadFile"),
+    url = url,
     headers, long_timeout,
     body = list(File = httr::upload_file(file_path), isSLTobeConverted = "false"),
     encode = "multipart"
   )
+
   up_data <- rdbes_handle_status(res_up)
   message(">> Upload successful.")
 

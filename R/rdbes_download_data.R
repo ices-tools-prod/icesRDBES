@@ -38,7 +38,7 @@ rdbes_download_data <- function(payload, dest_dir = ".", production = getOption(
   access_token <- rdbes_token()
 
   # load API URL from options
-  url <- rdbes_api()
+  url <- paste0(rdbes_api(production = production), "/api/v1/export-jobs")
 
   # add includeDisclaimer to payload
   payload$includeDisclaimer <- TRUE

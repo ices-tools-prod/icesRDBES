@@ -154,9 +154,10 @@ National Information (NI), which consist of Catch National (CN) and Distribution
 ```r
 library(icesRDBES)
 
-result <- rdbes_upload_data(
-file_path = "D:\\support\\finalcheckstestfiles\\importtest_HNI.csv",
-hierarchy = "HNI")
+# test file incliuded in the package
+filename <- system.file("test_files/importtest_HNI.csv", package = "icesRDBES")
+
+result <- rdbes_upload_data(file_path = filename, hierarchy = "HNI")
 ```
 
 Effort National (EN) example for upload of RDBES CEF data
