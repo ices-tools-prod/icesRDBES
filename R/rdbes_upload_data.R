@@ -17,7 +17,7 @@
 #' result <- rdbes_upload_data(file_path = filename, hierarchy = "HNI")
 #' }
 #'
-#' @importFrom utils URLencode browseURL
+#' @importFrom utils URLencode browseURL packageVersion
 #' @importFrom httr timeout add_headers POST GET write_disk upload_file verbose
 #' @export
 rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbes.production"), verbose = FALSE) {
@@ -33,7 +33,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
   headers <-
     add_headers(
       Authorization = paste("Bearer", access_token),
-      "X-RDBES-Package-Version" = "2.0.0"
+      "X-RDBES-Package-Version" = as.character(packageVersion("icesRDBES"))
     )
   long_timeout <- timeout(600)
 

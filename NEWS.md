@@ -1,3 +1,10 @@
+# icesRDBES 0.0.9 (2025-06-18)
+
+* Modified rdbes_upload_data() so that a screening report is downloaded and user needs to confirm if
+  data will be deleted by upload.
+* Added package version to API GET request to request user to update icesRDBES package if version is not high enough.
+* Package version now quoted in package load message.
+
 # icesRDBES 0.0.8 (2025-05-13)
 
 * Added functions to upload data: upload_rdbes_data()

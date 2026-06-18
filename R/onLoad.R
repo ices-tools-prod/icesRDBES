@@ -23,7 +23,7 @@
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
-    "icesRDBES loaded and set to ",
+    "icesRDBES (v", as.character(packageVersion("icesRDBES")), ") loaded and set to ",
     ifelse(getOption("rdbes.production"), "PRODUCTION", "SANDBOX/DEVELOPMENT"),
     " mode. \nSee `?use_sboxrdbes` to switch between sandbox and production API endpoints."
   )
