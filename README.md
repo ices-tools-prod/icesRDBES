@@ -51,12 +51,18 @@ fetches a token and allows you to see what is in it:
 
 ``` r
 library(icesRDBES)
+```
+
+    ## icesRDBES (v0.0.9) loaded and set to PRODUCTION mode. 
+    ## See `?use_sboxrdbes` to switch between sandbox and production API endpoints.
+
+``` r
 decoded_token <- decode_token()
 decoded_token[c("expiration")]
 ```
 
     ## $expiration
-    ## [1] "2026-05-13 13:45:19 UTC"
+    ## [1] "2026-06-18 16:41:57 UTC"
 
 ``` r
 # you can directly access the token with rdbes_token()
@@ -209,20 +215,57 @@ hierarchy = "H1")
 
 # API rdbes_download_data
 
+The rdbes_download_data can be used to download detailed RDBES data or
+CEF data from RDBES.
+
 ### Mandatory Request Object Fields
 
 Every request must include these four core components:
 
-`dataType`: “CS”, “CL”, “CE”, “SL”, or “VD”.
+`dataType`: “CS”, “CL”, “CE”, “SL”, “VD””, or “CEF”.
 
 `format`: “SingleCsvFile” or “CsvFilePerTable”.
 
-`hierarchies`: The specific hierarchy list for the data type.
+`hierarchies`: “CS”, “CL”, “CE”, “SL”, “VD”, “HNI”, “HEN”, and “HSN”.
 
 data type `filters`: The specific filter object for the data type
 (e.g. csFilters).
 
-### Calling the API
+### Download CEF data
+
+To download all three CEF hierarchies (work will be done to update the
+filter names) “HNI”, “HEN”, “HSN”, which consist of the four record
+types/tables CN, DN, SN and EN in one gone please see the example below:
+my_filter \<- list(”Hierarchies”: \[“HNI”, “HEN”, “HSN”\], “DataType”:
+“CEF”, “Format”: “SingleCsvFile”, “CEFFilters”: { “CNVesselFlagCountry”:
+\[“FR”\], “CNstock”: \[“cod.27.21”\], “CNyear”:
+\[“2020”,“2021”,“2022”,“2023”\], “SNstock”: \[“cod.27.21”\], “SNyear”:
+\[“2020”,“2021”,“2022”,“2023”\], “ENyear”:
+\[“2020”,“2021”,“2022”,“2023”\] “ENStockForDeterminingAreas”:
+\[“cod.27.21”\] )
+
+Files are download by calling the API like this:
+
+zipfile \<- rdbes_download_data(my_filter)
+
+There is not need for a filter for the Distribution National (DN)
+table/record type because the DN is always downloaded in connection with
+the Catch National (CN) in the National Information (NI). The
+“ENStockForDeterminingAreas” is a filter used to determine the effort
+areas that should be downloaded for the stock, (this is because, as you
+know, there is not stock data in the effort table). It is also possible
+to download one hierarchy ) “HNI”, “HEN”, “HSN” at the time, two
+tables/record types for “HNI”, and one tables/record types for “HEN”,
+“HSN”, see the example below my_filter \<- list( “Hierarchies”:
+\[“HNI”\], “DataType”: “CEF”, “Format”: ” CsvFilePerTable
+“,”CEFFilters”: { “CNVesselFlagCountry”: \[“FR”\], “CNstock”:
+\[“cod.27.21”\], “CNyear”: \[“2020”,“2021”,“2022”,“2023”\], )
+
+Files are download by calling the API like this:
+
+zipfile \<- rdbes_download_data(my_filter)
+
+### Download RDBES data
 
 To download data from RDBES, you can use the
 [`rdbes_download_data`](https://ices-tools-prod.r-universe.dev/icesRDBES/doc/manual.html#rdbes_download_data)
@@ -244,7 +287,7 @@ rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: ea7eb22c-e7c9-41cd-975c-144fc94c34e3. Polling for completion...
+    ## Job ID: 4820f620-2f4b-4533-9443-0362ffafb02f. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -252,9 +295,9 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_ea7eb22c-e7c9-41cd-975c-144fc94c34e3.zip
+    ## Process finished. File saved: ./export_4820f620-2f4b-4533-9443-0362ffafb02f.zip
 
-    ## [1] "./export_ea7eb22c-e7c9-41cd-975c-144fc94c34e3.zip"
+    ## [1] "./export_4820f620-2f4b-4533-9443-0362ffafb02f.zip"
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -283,7 +326,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 1699b70b-4042-47fc-a947-08b80ecae3fd. Polling for completion...
+    ## Job ID: cda18539-b263-4729-94a6-ad09851991c7. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -291,7 +334,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpCIITOH/export_1699b70b-4042-47fc-a947-08b80ecae3fd.zip
+    ## Process finished. File saved: /tmp/Rtmp5rgxqZ/export_cda18539-b263-4729-94a6-ad09851991c7.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -299,8 +342,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-05-13 15:00:00
-    ## 2 Disclaimer.txt    810 2026-05-13 15:00:00
+    ## 1        HSL.csv      0 2026-06-18 17:40:00
+    ## 2 Disclaimer.txt    810 2026-06-18 17:40:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -400,7 +443,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 53ba1f77-d100-4b89-900b-9ba7b8970c13. Polling for completion...
+    ## Job ID: 4c9d9897-8f20-48e2-af4e-bf6f7b4c2f92. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -408,7 +451,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/RtmpCIITOH/export_53ba1f77-d100-4b89-900b-9ba7b8970c13.zip
+    ## Process finished. File saved: /tmp/Rtmp5rgxqZ/export_4c9d9897-8f20-48e2-af4e-bf6f7b4c2f92.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -416,8 +459,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-05-13 15:00:00
-    ## 2 Disclaimer.txt    810 2026-05-13 15:00:00
+    ## 1        HCL.csv    898 2026-06-18 17:40:00
+    ## 2 Disclaimer.txt    810 2026-06-18 17:40:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
