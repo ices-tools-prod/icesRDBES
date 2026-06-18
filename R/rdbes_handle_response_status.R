@@ -34,10 +34,11 @@ rdbes_handle_status <- function(res) {
   } else {
     err_msg <- "An unknown error occurred."
     if (is.list(content)) {
-      err_msg <- if(!is.null(content$Message)) content$Message
-      else if(!is.null(content$message)) content$message
-      else if(!is.null(content$error)) content$error
-      else "Unknown API Error"
+      err_msg <-
+        if (!is.null(content$Message)) content$Message
+          else if (!is.null(content$message)) content$message
+          else if (!is.null(content$error)) content$error
+          else "Unknown API Error"
     }
     stop(paste0("[Error ", code, "]: ", err_msg))
   }
