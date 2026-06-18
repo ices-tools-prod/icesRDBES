@@ -128,6 +128,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
             body = list(SerialNumber = serial_num),
             encode = "json"
           )
+        # this will stop if error code returned.
         rdbes_handle_status(res_resume)
         Sys.sleep(3)
         next
