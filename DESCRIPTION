@@ -4,6 +4,7 @@ Title: Tools for the ICES Regional DataBase and Estimation System
 Authors@R:
   c(
     person("Ezaj", "Muhammad", role = "aut", email = "ejaz.muhammad@ices.dk"),
+    person("Henrik", "Kjems-Nielsen", role = "aut"),
     person("Colin", "Millar", role = c("aut", "cre"), email = "colin.millar@ices.dk")
   )
 Description: Tools to support the ICES Regional DataBase and Estimation System

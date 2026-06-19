@@ -1,0 +1,9 @@
+bibentry(
+  bibtype="Misc",
+  title="{Regional Database and Estimation System}",
+  year="2024",
+  author="ICES",
+  url = "https://ices-library.figshare.com/articles/report/Regional_Database_and_Estimation_System/27636987",
+  doi = "10.17895/ices.pub.27636987.v1",
+  textVersion="ICES (2024). Regional Database and Estimation System. ICES Data Flow Schematics. Report. https://doi.org/10.17895/ices.pub.27636987.v1"
+)
