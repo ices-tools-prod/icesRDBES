@@ -47,22 +47,17 @@ known users with permission will be given access to the
 rdbes_download_data.
 
 You can check your access by running the `decode_token` function, which
-fetches a token and allows you to see what is in it:
+fetches a token and allows you to see what is in it, but this is just if
+you are curious - it is not necessary.
 
 ``` r
 library(icesRDBES)
-```
-
-    ## icesRDBES (v0.0.9) loaded and set to PRODUCTION mode. 
-    ## See `?use_sboxrdbes` to switch between sandbox and production API endpoints.
-
-``` r
 decoded_token <- decode_token()
 decoded_token[c("expiration")]
 ```
 
     ## $expiration
-    ## [1] "2026-06-18 16:41:57 UTC"
+    ## [1] "2026-06-19 14:05:37 UTC"
 
 ``` r
 # you can directly access the token with rdbes_token()
@@ -188,9 +183,11 @@ Effort National (EN) example for upload of RDBES CEF data
 ``` r
 library(icesRDBES)
 
-result <- rdbes_upload_data(
-file_path = "D:\\support\\finalcheckstestfiles\\importtest_HEN.csv",
-hierarchy = "HEN")
+result <-
+  rdbes_upload_data(
+    file_path = "D:\\support\\finalcheckstestfiles\\importtest_HEN.csv",
+    hierarchy = "HEN"
+  )
 ```
 
 Spatial National (SN) example for upload of RDBES CEF data
@@ -198,9 +195,11 @@ Spatial National (SN) example for upload of RDBES CEF data
 ``` r
 library(icesRDBES)
 
-result <- rdbes_upload_data(
-file_path = "D:\\support\\finalcheckstestfiles\\importtest_HSN.csv",
-hierarchy = "HSN")
+result <-
+  rdbes_upload_data(
+    file_path = "D:\\support\\finalcheckstestfiles\\importtest_HSN.csv",
+    hierarchy = "HSN"
+  )
 ```
 
 Hierarchy 1 of the Commercial Sampling example for upload of RDBES data
@@ -208,9 +207,11 @@ Hierarchy 1 of the Commercial Sampling example for upload of RDBES data
 ``` r
 library(icesRDBES)
 
-result <- rdbes_upload_data(
-file_path = "D:\\support\\finalcheckstestfiles\\importtest_H1.csv",
-hierarchy = "H1")
+result <-
+  rdbes_upload_data(
+    file_path = "D:\\support\\finalcheckstestfiles\\importtest_H1.csv",
+    hierarchy = "H1"
+  )
 ```
 
 # API rdbes_download_data
@@ -236,34 +237,86 @@ data type `filters`: The specific filter object for the data type
 To download all three CEF hierarchies (work will be done to update the
 filter names) “HNI”, “HEN”, “HSN”, which consist of the four record
 types/tables CN, DN, SN and EN in one gone please see the example below:
-my_filter \<- list( “Hierarchies”: \[“HNI”, “HEN”, “HSN”\], “DataType”:
-“CEF”, “Format”: “SingleCsvFile”, “CEFFilters”: { “CNVesselFlagCountry”:
-\[“FR”\], “CNstock”: \[“cod.27.21”\], “CNyear”:
-\[“2020”,“2021”,“2022”,“2023”\], “SNstock”: \[“cod.27.21”\], “SNyear”:
-\[“2020”,“2021”,“2022”,“2023”\], “ENyear”:
-\[“2020”,“2021”,“2022”,“2023”\] “ENStockForDeterminingAreas”:
-\[“cod.27.21”\] )
+
+``` r
+my_filter <- list(
+  dataType = "CEF",
+  format = "SingleCsvFile",
+  hierarchies = list("HNI", "HEN", "HSN"),
+  CEFFilters = list(
+    CNVesselFlagCountry = list("ZW"),
+    CNstock = list("bll.27.3a47de"),
+    CNyear = list("2020","2021","2022","2023"),
+    ENVesselFlagCountry = list("ZW"),
+    ENyear =  list("2020","2021","2022","2023"),
+    ENStockForDeterminingAreas = list("bll.27.3a47de"),
+    SNVesselFlagCountry = list("ZW"),
+    SNstock = list("bll.27.3a47de"),
+    SNyear =  list("2020","2021","2022","2023")
+  )
+)
+```
 
 Files are download by calling the API like this:
 
-zipfile \<- rdbes_download_data(my_filter)
+``` r
+zipfile <- rdbes_download_data(my_filter)
+```
+
+    ## Error:
+    ## ! 
+    ## --- RDBES API ERROR ---
+    ## Step: Create Export Job
+    ## Status: 403 Forbidden (CLIENT ERROR)
+    ## Response: $message
+    ## [1] "Access denied for one or more requested parameters."
+    ## 
+    ## $details
+    ##   hierarchy allowedCountries deniedCountries message allowedRCGAreas allowedStocks  deniedStocks
+    ## 1       HNI             NULL              ZW      NA            NULL          NULL bll.27.3a47de
 
 There is not need for a filter for the Distribution National (DN)
 table/record type because the DN is always downloaded in connection with
-the Catch National (CN) in the National Information (NI). The
-“ENStockForDeterminingAreas” is a filter used to determine the effort
-areas that should be downloaded for the stock, (this is because, as you
-know, there is not stock data in the effort table). It is also possible
-to download one hierarchy ) “HNI”, “HEN”, “HSN” at the time, two
-tables/record types for “HNI”, and one tables/record types for “HEN”,
-“HSN”, see the example below my_filter \<- list( “Hierarchies”:
-\[“HNI”\], “DataType”: “CEF”, “Format”: ” CsvFilePerTable
-“,”CEFFilters”: { “CNVesselFlagCountry”: \[“FR”\], “CNstock”:
-\[“cod.27.21”\], “CNyear”: \[“2020”,“2021”,“2022”,“2023”\], )
+the Catch National (CN) in the National Information (NI).
+
+The `"ENStockForDeterminingAreas"` is a filter used to determine the
+effort areas that should be downloaded for the stock, (this is because,
+as you know, there is not stock data in the effort table).
+
+It is also possible to download one hierarchy: “HNI”, “HEN”, “HSN” at a
+time, two tables/record types for “HNI”, and one tables/record types for
+“HEN”, “HSN”, see the example below
+
+``` r
+my_filter <- list(
+  dataType = "CEF",
+  format = "CsvFilePerTable",
+  hierarchies = list("HNI"),
+  CEFFilters = list(
+    CNVesselFlagCountry = list("ZW"),
+    CNstock = list("bll.27.3a47de"),
+    CNyear = list("2020","2021","2022","2023")
+  )
+)
+```
 
 Files are download by calling the API like this:
 
-zipfile \<- rdbes_download_data(my_filter)
+``` r
+zipfile <- rdbes_download_data(my_filter)
+```
+
+    ## Error:
+    ## ! 
+    ## --- RDBES API ERROR ---
+    ## Step: Create Export Job
+    ## Status: 403 Forbidden (CLIENT ERROR)
+    ## Response: $message
+    ## [1] "Access denied for one or more requested parameters."
+    ## 
+    ## $details
+    ##   hierarchy allowedCountries deniedCountries message allowedRCGAreas allowedStocks  deniedStocks
+    ## 1       HNI             NULL              ZW      NA            NULL          NULL bll.27.3a47de
 
 ### Download RDBES data
 
@@ -282,12 +335,12 @@ my_filter <- list(
     slYear = list("2024")
   )
 )
-rdbes_download_data(my_filter)
+zipfile <- rdbes_download_data(my_filter)
 ```
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 405677b0-e7f9-4360-96ee-eca227c01ceb. Polling for completion...
+    ## Job ID: 2ea299e1-2f6a-49fe-9a68-404d3639f85a. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -295,13 +348,21 @@ rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_405677b0-e7f9-4360-96ee-eca227c01ceb.zip
-
-    ## [1] "./export_405677b0-e7f9-4360-96ee-eca227c01ceb.zip"
+    ## Process finished. File saved: ./export_2ea299e1-2f6a-49fe-9a68-404d3639f85a.zip
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
-file as a character string.
+file as a character string, and can then be accessed using the variable
+`zipfile`, for example:
+
+``` r
+# read contents of the downloaded ZIP file
+unzip(zipfile, list = TRUE)
+```
+
+    ##             Name Length                Date
+    ## 1        HSL.csv      0 2026-06-19 15:41:00
+    ## 2 Disclaimer.txt    810 2026-06-19 15:41:00
 
 ## Simple workflow examples
 
@@ -326,7 +387,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: e243284e-e112-4354-acba-2a8b02340e37. Polling for completion...
+    ## Job ID: e70ca36e-c8f1-4dd9-b8fc-b2a167912e40. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -334,7 +395,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/Rtmp5rgxqZ/export_e243284e-e112-4354-acba-2a8b02340e37.zip
+    ## Process finished. File saved: /tmp/Rtmp4GYCQ2/export_e70ca36e-c8f1-4dd9-b8fc-b2a167912e40.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -342,12 +403,14 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-06-18 17:42:00
-    ## 2 Disclaimer.txt    810 2026-06-18 17:42:00
+    ## 1        HSL.csv      0 2026-06-19 15:41:00
+    ## 2 Disclaimer.txt    810 2026-06-19 15:41:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
 unzip(zipfile, exdir = "rdbes")
+
+# or process directly from the zip file using RDBESCore
 
 # read in csv file
 # ...
@@ -391,7 +454,8 @@ type_filters[["CE"]]
     ## list()
 
 A more complex example using the predefined filters for each data type
-could look like this:
+could look like this, in this example we save the zip to a temporary
+directory, but you can specify any directory you want:
 
 ``` r
 library(icesRDBES)
@@ -431,8 +495,8 @@ selected_filter
 my_filter <-
   c(
     list(
-      dataType          = selected_type,
-      format            = selected_format
+      dataType = selected_type,
+      format   = selected_format
     ),
     selected_filter
   )
@@ -443,7 +507,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: da335d1f-e857-4b12-81e1-1f38a114f635. Polling for completion...
+    ## Job ID: 06edb680-c5b2-4d05-b1b9-19145833e4c0. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -451,7 +515,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/Rtmp5rgxqZ/export_da335d1f-e857-4b12-81e1-1f38a114f635.zip
+    ## Process finished. File saved: /tmp/Rtmp4GYCQ2/export_06edb680-c5b2-4d05-b1b9-19145833e4c0.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -459,8 +523,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-06-18 17:42:00
-    ## 2 Disclaimer.txt    810 2026-06-18 17:42:00
+    ## 1        HCL.csv    898 2026-06-19 15:41:00
+    ## 2 Disclaimer.txt    810 2026-06-19 15:41:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
@@ -491,27 +555,27 @@ list(
 
 The following are the filters for each data type:
 
-CL: clVesselFlagCountry (mandatory), clYear (optional), clArea
+`CL`: clVesselFlagCountry (mandatory), clYear (optional), clArea
 (optional), and clSpeciesCode (optional).
 
-CE: ceVesselFlagCountry (mandatory), ceYear (optional), and ceArea
+`CE`: ceVesselFlagCountry (mandatory), ceYear (optional), and ceArea
 (optional).
 
-CS: sdCountry (mandatory), deYear (optional), deSamplingScheme
+`CS`: sdCountry (mandatory), deYear (optional), deSamplingScheme
 (optional), deStratumName (optional), saSpeciesCode (optional), foArea
 (optional), and leArea (optional).
 
-SL: slCountry (mandatory), slYear (optional), slSpeciesListName
+`SL`: slCountry (mandatory), slYear (optional), slSpeciesListName
 (optional), and slCatchFraction (optional).
 
-VD: vdCountry (mandatory) and vdYear (optional).
+`VD`: vdCountry (mandatory) and vdYear (optional).
 
 **Country filter**
 
-The country filter within the filter list for each data type; CL, CE,
-CS, SL, and VD is mandatory for permission validation. The country
-filters are; clVesselFlagCountry, ceVesselFlagCountry, sdCountry,
-slCountry, and vdCountry
+The country filter within the filter list for each data type; `CL`,
+`CE`, `CS`, `SL`, and `VD` is mandatory for permission validation. The
+country filters are; `clVesselFlagCountry`, `ceVesselFlagCountry`,
+`sdCountry`, `slCountry`, and `vdCountry`
 
 For data submitters and national estimators a specific county filter
 must be provided e.g., “ES” or “FR” (for test data “ZW”)
@@ -535,10 +599,9 @@ and H12, please fill-in/use leArea in the CS filters.
 
 When RCG chairs use the country filter “All” for Commercial Landings
 (CL), Commercial Effort (CE) or Commercial Sampling (CS) the area
-filters; clArea, ceArea, foArea, and leArea will be ignored and the
-areas for the RCG will be used.
-
-### Examples of calling the API for data download
+filters; `clArea`, `ceArea`, `foArea`, and `leArea` will be ignored and
+the areas for the RCG will be used. \### Examples of calling the API for
+data download
 
 In the following there is given an example of a call to the RDBES API
 for each data type “CS”, “CL”, “CE”, “SL”, and “VD”.
@@ -649,7 +712,7 @@ To use the development database you need to run the following code
 before you download data:
 
 ``` r
-use_sboxrdbes(TRUE)
+use_sboxrdbes()
 ```
 
     ## Sandbox/develpment mode is now ON. RDBES API URL set to: https://sboxrdbes.ices.dk
@@ -673,5 +736,5 @@ The current development version can be installed using:
 
 ``` r
 library(remotes)
-install_github("ices-tools-prod/icesRDBES")
+install_github("ices-tools-prod/icesRDBES@development")
 ```
