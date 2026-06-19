@@ -5,7 +5,8 @@
 \title{Upload RDBES Data}
 \usage{
 rdbes_upload_data(file_path, hierarchy,
-  production = getOption("rdbes.production"), verbose = FALSE)
+  production = getOption("rdbes.production"), verbose = FALSE,
+  url = NULL)
 }
 \arguments{
 \item{file_path}{Character. The path to the file to upload.}
@@ -15,6 +16,8 @@ rdbes_upload_data(file_path, hierarchy,
 \item{production}{Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").}
 
 \item{verbose}{Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.}
+
+\item{url}{Character. Optional. Custom API URL intended for localhost testing.}
 }
 \value{
 Character. The path to the downloaded ZIP file.

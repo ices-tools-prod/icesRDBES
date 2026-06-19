@@ -7,6 +7,7 @@
 #' @param dest_dir Character. Optional. Directory to save the downloaded file. Defaults to the current working directory.
 #' @param production Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").
 #' @param verbose Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.
+#' @param url Character. Optional. Custom API URL intended for localhost testing.
 #'
 #' @details
 #' The payload should be a nested list. Example:
@@ -33,12 +34,12 @@
 #' @importFrom httr POST GET add_headers content write_disk content_type_json verbose
 #' @importFrom jsonlite toJSON
 #' @export
-rdbes_download_data <- function(payload, dest_dir = ".", production = getOption("rdbes.production"), verbose = FALSE) {
+rdbes_download_data <- function(payload, dest_dir = ".", production = getOption("rdbes.production"), verbose = FALSE, url = NULL) {
   # Get Token automatically
   access_token <- rdbes_token()
 
   # load API URL from options
-  url <- paste0(rdbes_api(production = production, type = "download"), "/api/v1/export-jobs")
+  url <- url %||% paste0(rdbes_api(production = production, type = "download"), "/api/v1/export-jobs")
 
   # add includeDisclaimer to payload
   payload$includeDisclaimer <- TRUE

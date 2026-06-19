@@ -5,7 +5,8 @@
 \title{Download RDBES Data}
 \usage{
 rdbes_download_data(payload, dest_dir = ".",
-  production = getOption("rdbes.production"), verbose = FALSE)
+  production = getOption("rdbes.production"), verbose = FALSE,
+  url = NULL)
 }
 \arguments{
 \item{payload}{List. The filter configuration including hierarchies, format, and filters.}
@@ -15,6 +16,8 @@ rdbes_download_data(payload, dest_dir = ".",
 \item{production}{Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").}
 
 \item{verbose}{Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.}
+
+\item{url}{Character. Optional. Custom API URL intended for localhost testing.}
 }
 \value{
 Character. The path to the downloaded ZIP file.

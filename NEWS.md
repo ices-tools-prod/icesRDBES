@@ -2,6 +2,7 @@
 
 * Modified rdbes_upload_data() so that a screening report is downloaded and user needs to confirm if
   data will be deleted by upload.
+* Added documentation on how to dowload CEF data.
 * Added package version to API GET request to request user to update icesRDBES package if version is not high enough.
 * Package version now quoted in package load message.
 

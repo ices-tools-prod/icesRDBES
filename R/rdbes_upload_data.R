@@ -7,6 +7,7 @@
 #' @param hierarchy Character. The hierarchy type for the upload.
 #' @param production Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").
 #' @param verbose Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.
+#' @param url Character. Optional. Custom API URL intended for localhost testing.
 #'
 #' @return Character. The path to the downloaded ZIP file.
 #'
@@ -20,14 +21,14 @@
 #' @importFrom utils URLencode browseURL packageVersion
 #' @importFrom httr timeout add_headers POST GET write_disk upload_file verbose
 #' @export
-rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbes.production"), verbose = FALSE) {
+rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbes.production"), verbose = FALSE, url = NULL) {
   if (!file.exists(file_path)) stop(paste("File not found:", file_path))
 
   # Get Token automatically
   access_token <- rdbes_token()
 
   # load API URL from options
-  api_root_url <- rdbes_api(production = production, type = "upload")
+  api_root_url <- url %||% rdbes_api(production = production, type = "upload")
 
   # useful request components
   headers <-
