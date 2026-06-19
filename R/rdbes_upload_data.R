@@ -49,7 +49,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
     if (verbose) verbose() else NULL
   )
 
-  up_data <- rdbes_handle_status(res_up)
+  up_data <- rdbes_handle_response(res_up)
   message(">> Upload successful.")
 
   # 2. Start Screening
@@ -65,7 +65,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
     encode = "json",
     if (verbose) verbose() else NULL
   )
-  start_data <- rdbes_handle_status(res_start)
+  start_data <- rdbes_handle_response(res_start)
   job_id <- start_data$jobId %||% start_data$JobId
   if (is.null(job_id)) stop("No JobId returned from API, contact rdbes@ices.dk.")
 
@@ -79,7 +79,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
         if (verbose) verbose() else NULL
       )
 
-    status_data <- rdbes_handle_status(res_status)
+    status_data <- rdbes_handle_response(res_status)
 
     is_ready <- status_data$IsReady %||% status_data$isReady
     raw_status <- status_data$Status %||% status_data$status
@@ -130,7 +130,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
             encode = "json"
           )
         # this will stop if error code returned.
-        rdbes_handle_status(res_resume)
+        rdbes_handle_response(res_resume)
         Sys.sleep(3)
         next
       } else {
@@ -227,7 +227,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
         ),
         if (verbose) verbose() else NULL
       )
-    import_data <- rdbes_handle_status(res_import)
+    import_data <- rdbes_handle_response(res_import)
     message(">> SUCCESS: ", import_data$Message)
     return(invisible(import_data))
   }
