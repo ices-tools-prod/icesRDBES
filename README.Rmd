@@ -220,7 +220,7 @@ data type `filters`: The specific filter object for the data type (e.g. csFilter
 
 
 ### Download CEF data
-To download all three CEF hierarchies (work will be done to update the filter names) "HNI", "HEN", "HSN", which consist of the four record types/tables CN, DN, SN and EN in one gone please see the example below:
+To download all three CEF hierarchies (work will be done to update the filter names) "HNI", "HEN", "HSN", which consist of the four record types/tables CN, DN, SN and EN in one gone please see the example below, in the parameter CNstock and SNstock only "All" is allowed, the specific stock data have to be filetered after the download:
 
 ```{r, eval = FALSE}
 my_filter <- list(
@@ -229,13 +229,13 @@ my_filter <- list(
   hierarchies = list("HNI", "HEN", "HSN"),
   CEFFilters = list(
     CNVesselFlagCountry = list("ZW"),
-    CNstock = list("bll.27.3a47de"),
+    CNstock = list("All"),
     CNyear = list("2020","2021","2022","2023"),
     ENVesselFlagCountry = list("ZW"),
     ENyear =  list("2020","2021","2022","2023"),
     ENStockForDeterminingAreas = list("bll.27.3a47de"),
     SNVesselFlagCountry = list("ZW"),
-    SNstock = list("bll.27.3a47de"),
+    SNstock = list("All"),
     SNyear =  list("2020","2021","2022","2023")
   )
 )
@@ -260,7 +260,7 @@ my_filter <- list(
   hierarchies = list("HNI"),
   CEFFilters = list(
     CNVesselFlagCountry = list("ZW"),
-    CNstock = list("bll.27.3a47de"),
+    CNstock = list("All"),
     CNyear = list("2020","2021","2022","2023")
   )
 )
