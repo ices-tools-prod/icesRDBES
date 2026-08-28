@@ -222,7 +222,7 @@ data type `filters`: The specific filter object for the data type (e.g. csFilter
 ### Download CEF data
 To download all three CEF hierarchies (work will be done to update the filter names) "HNI", "HEN", "HSN", which consist of the four record types/tables CN, DN, SN and EN in one gone please see the example below, in the parameter CNstock and SNstock only "All" is allowed, the specific stock data have to be filetered after the download:
 
-```{r, eval = FALSE}
+```{r}
 my_filter <- list(
   dataType = "CEF",
   format = "SingleCsvFile",

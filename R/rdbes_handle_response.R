@@ -17,9 +17,7 @@ rdbes_handle_response <- function(res, step_name = "", simplify = TRUE) {
     }
   }
 
-  content_raw <- content(res, as = "text", encoding = "UTF-8")
-  content <- if (content_raw != "") fromJSON(content_raw) else list()
-
+  content <- content(res, simplifyVector = TRUE)
   err_body <- paste(capture.output(content), collapse = "\n")
 
   category <-
@@ -34,7 +32,7 @@ rdbes_handle_response <- function(res, step_name = "", simplify = TRUE) {
   # stop with detailed message
   msg <-
     sprintf(
-      "\n--- RDBES API ERROR ---\nStep: %s\nStatus: %d %s (%s)\nResponse: %s",
+      "\n--- RDBES API ERROR ---\nStep: %s\nStatus: %d %s (%s)\nResponse: \n%s",
       step_name, status, status_text, category, err_body
     )
   stop(msg, call. = FALSE)

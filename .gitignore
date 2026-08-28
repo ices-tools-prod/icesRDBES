@@ -52,3 +52,9 @@ rsconnect/
 # renv files
 renv.lock
 renv/
+
+/*.zip
+
+/Screening_Report_*.json
+
+/reordered_*.csv

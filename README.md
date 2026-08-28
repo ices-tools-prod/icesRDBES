@@ -57,7 +57,7 @@ decoded_token[c("expiration")]
 ```
 
     ## $expiration
-    ## [1] "2026-06-19 14:05:37 UTC"
+    ## [1] "2026-08-28 13:00:05 UTC"
 
 ``` r
 # you can directly access the token with rdbes_token()
@@ -236,7 +236,9 @@ data type `filters`: The specific filter object for the data type
 
 To download all three CEF hierarchies (work will be done to update the
 filter names) “HNI”, “HEN”, “HSN”, which consist of the four record
-types/tables CN, DN, SN and EN in one gone please see the example below:
+types/tables CN, DN, SN and EN in one gone please see the example below,
+in the parameter CNstock and SNstock only “All” is allowed, the specific
+stock data have to be filetered after the download:
 
 ``` r
 my_filter <- list(
@@ -245,13 +247,13 @@ my_filter <- list(
   hierarchies = list("HNI", "HEN", "HSN"),
   CEFFilters = list(
     CNVesselFlagCountry = list("ZW"),
-    CNstock = list("bll.27.3a47de"),
+    CNstock = list("All"),
     CNyear = list("2020","2021","2022","2023"),
     ENVesselFlagCountry = list("ZW"),
     ENyear =  list("2020","2021","2022","2023"),
     ENStockForDeterminingAreas = list("bll.27.3a47de"),
     SNVesselFlagCountry = list("ZW"),
-    SNstock = list("bll.27.3a47de"),
+    SNstock = list("All"),
     SNyear =  list("2020","2021","2022","2023")
   )
 )
@@ -268,12 +270,15 @@ zipfile <- rdbes_download_data(my_filter)
     ## --- RDBES API ERROR ---
     ## Step: Create Export Job
     ## Status: 403 Forbidden (CLIENT ERROR)
-    ## Response: $message
+    ## Response: 
+    ## $message
     ## [1] "Access denied for one or more requested parameters."
     ## 
     ## $details
     ##   hierarchy allowedCountries deniedCountries message allowedRCGAreas allowedStocks  deniedStocks
-    ## 1       HNI             NULL              ZW      NA            NULL          NULL bll.27.3a47de
+    ## 1       HNI             NULL              ZW      NA            NULL          NULL              
+    ## 2       HEN             NULL              ZW      NA            NULL          NULL bll.27.3a47de
+    ## 3       HSN             NULL              ZW      NA            NULL          NULL
 
 There is not need for a filter for the Distribution National (DN)
 table/record type because the DN is always downloaded in connection with
@@ -294,7 +299,7 @@ my_filter <- list(
   hierarchies = list("HNI"),
   CEFFilters = list(
     CNVesselFlagCountry = list("ZW"),
-    CNstock = list("bll.27.3a47de"),
+    CNstock = list("All"),
     CNyear = list("2020","2021","2022","2023")
   )
 )
@@ -311,12 +316,13 @@ zipfile <- rdbes_download_data(my_filter)
     ## --- RDBES API ERROR ---
     ## Step: Create Export Job
     ## Status: 403 Forbidden (CLIENT ERROR)
-    ## Response: $message
+    ## Response: 
+    ## $message
     ## [1] "Access denied for one or more requested parameters."
     ## 
     ## $details
-    ##   hierarchy allowedCountries deniedCountries message allowedRCGAreas allowedStocks  deniedStocks
-    ## 1       HNI             NULL              ZW      NA            NULL          NULL bll.27.3a47de
+    ##   hierarchy allowedCountries deniedCountries message allowedRCGAreas allowedStocks deniedStocks
+    ## 1       HNI             NULL              ZW      NA            NULL          NULL         NULL
 
 ### Download RDBES data
 
@@ -340,7 +346,7 @@ zipfile <- rdbes_download_data(my_filter)
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 2ea299e1-2f6a-49fe-9a68-404d3639f85a. Polling for completion...
+    ## Job ID: 0266065c-1f04-48f8-91fd-609d58d06180. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -348,7 +354,7 @@ zipfile <- rdbes_download_data(my_filter)
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: ./export_2ea299e1-2f6a-49fe-9a68-404d3639f85a.zip
+    ## Process finished. File saved: ./export_0266065c-1f04-48f8-91fd-609d58d06180.zip
 
 The above example dowloads a zip file to your current working directory,
 the `rdbes_download_data` function returns the path to the downloaded
@@ -361,8 +367,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-06-19 15:41:00
-    ## 2 Disclaimer.txt    810 2026-06-19 15:41:00
+    ## 1        HSL.csv      0 2026-08-28 14:37:00
+    ## 2 Disclaimer.txt    810 2026-08-28 14:37:00
 
 ## Simple workflow examples
 
@@ -387,7 +393,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: e70ca36e-c8f1-4dd9-b8fc-b2a167912e40. Polling for completion...
+    ## Job ID: c2fcebed-d315-402e-b350-fddd224e8cea. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -395,7 +401,7 @@ zipfile <- rdbes_download_data(my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/Rtmp4GYCQ2/export_e70ca36e-c8f1-4dd9-b8fc-b2a167912e40.zip
+    ## Process finished. File saved: /tmp/RtmpRiASwJ/export_c2fcebed-d315-402e-b350-fddd224e8cea.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -403,8 +409,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HSL.csv      0 2026-06-19 15:41:00
-    ## 2 Disclaimer.txt    810 2026-06-19 15:41:00
+    ## 1        HSL.csv      0 2026-08-28 14:37:00
+    ## 2 Disclaimer.txt    810 2026-08-28 14:37:00
 
 ``` r
 # unzip into a folder called "rdbes" in the current working directory
@@ -507,7 +513,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [201 Created] Create Export Job
 
-    ## Job ID: 06edb680-c5b2-4d05-b1b9-19145833e4c0. Polling for completion...
+    ## Job ID: fa512535-0375-46eb-9013-0cf97a2e8db2. Polling for completion...
 
     ## [200 OK] Check Status
 
@@ -515,7 +521,7 @@ zipfile <- rdbes_download_data(payload = my_filter, dest_dir = tempdir())
 
     ## [200 OK] Download File
 
-    ## Process finished. File saved: /tmp/Rtmp4GYCQ2/export_06edb680-c5b2-4d05-b1b9-19145833e4c0.zip
+    ## Process finished. File saved: /tmp/RtmpRiASwJ/export_fa512535-0375-46eb-9013-0cf97a2e8db2.zip
 
 ``` r
 # list the contents of the downloaded ZIP file
@@ -523,8 +529,8 @@ unzip(zipfile, list = TRUE)
 ```
 
     ##             Name Length                Date
-    ## 1        HCL.csv    898 2026-06-19 15:41:00
-    ## 2 Disclaimer.txt    810 2026-06-19 15:41:00
+    ## 1        HCL.csv    898 2026-08-28 14:37:00
+    ## 2 Disclaimer.txt    810 2026-08-28 14:37:00
 
 ``` r
 # list the contents of the downloaded ZIP file to local directory
