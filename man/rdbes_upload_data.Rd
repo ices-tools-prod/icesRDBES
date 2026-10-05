@@ -6,7 +6,7 @@
 \usage{
 rdbes_upload_data(file_path, hierarchy,
   production = getOption("rdbes.production"), verbose = FALSE,
-  url = NULL)
+  url = NULL, overwriteWithoutAsking = FALSE)
 }
 \arguments{
 \item{file_path}{Character. The path to the file to upload.}
@@ -18,6 +18,8 @@ rdbes_upload_data(file_path, hierarchy,
 \item{verbose}{Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.}
 
 \item{url}{Character. Optional. Custom API URL intended for localhost testing.}
+
+\item{overwriteWithoutAsking}{Logical. Optional. If TRUE, the function automatically passes mid-validation checkpoints and overwrites duplicate server data without stopping for console input or opening windows. Defaults to FALSE.}
 }
 \value{
 Character. The path to the downloaded ZIP file.
