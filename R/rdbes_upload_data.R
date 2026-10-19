@@ -8,6 +8,7 @@
 #' @param production Logical. Optional. Whether to use the production API endpoint. Defaults to getOption("rdbes.production").
 #' @param verbose Logical. Optional. Whether to print verbose HTTP request/response details. Defaults to FALSE.
 #' @param url Character. Optional. Custom API URL intended for localhost testing.
+#' @param overwriteWithoutAsking Logical. Optional. If TRUE, the function automatically passes mid-validation checkpoints and overwrites duplicate server data without stopping for console input or opening windows. Defaults to FALSE.
 #'
 #' @return Character. The path to the downloaded ZIP file.
 #'
@@ -19,9 +20,9 @@
 #' }
 #'
 #' @importFrom utils URLencode browseURL packageVersion
-#' @importFrom httr timeout add_headers POST GET write_disk upload_file verbose
+#' @importFrom httr timeout add_headers POST GET write_disk upload_file verbose status_code
 #' @export
-rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbes.production"), verbose = FALSE, url = NULL) {
+rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbes.production"), verbose = FALSE, url = NULL, overwriteWithoutAsking = FALSE) {
   if (!file.exists(file_path)) stop(paste("File not found:", file_path))
 
   # Get Token automatically
@@ -59,14 +60,14 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
     headers,
     body = list(
       RealFileName = basename(file_path),
-      ModifiedFileNameOnServer = up_data$modifiedFileNameOnServer,
+      ModifiedFileNameOnServer = up_data[["modifiedFileNameOnServer"]],
       Hierarchy = hierarchy
     ),
     encode = "json",
     if (verbose) verbose() else NULL
   )
   start_data <- rdbes_handle_response(res_start)
-  job_id <- start_data$jobId %||% start_data$JobId
+  job_id <- start_data[["jobId"]] %||% start_data[["JobId"]]
   if (is.null(job_id)) stop("No JobId returned from API, contact rdbes@ices.dk.")
 
   # 3. Polling
@@ -81,12 +82,12 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
 
     status_data <- rdbes_handle_response(res_status)
 
-    is_ready <- status_data$IsReady %||% status_data$isReady
-    raw_status <- status_data$Status %||% status_data$status
+    is_ready <- status_data[["IsReady"]] %||% status_data[["isReady"]]
+    raw_status <- status_data[["Status"]] %||% status_data[["status"]]
 
-    req_confirm <- status_data$RequiresConfirmation %||% FALSE
-    serial_num <- status_data$FailedCheckSerialNumber
-    srv_message <- status_data$Message %||% "Action confirmation required."
+    req_confirm <- status_data[["RequiresConfirmation"]] %||% FALSE
+    serial_num <- status_data[["FailedCheckSerialNumber"]]
+    srv_message <- status_data[["Message"]] %||% "Action confirmation required."
 
     message(
       paste0("[", format(Sys.time(), "%H:%M:%S"), "] Status: ", raw_status %||% "Processing")
@@ -108,20 +109,13 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
 
       if (status_code(res_dl_confirm) == 200) {
         message(">> Confirmation report saved: ", confirm_path)
-
-        # Open it in the editor or browser window immediately so the user can look at it
-        if (has_rstudio()) {
-          rstudioapi::navigateToFile(confirm_path)
-        } else {
-          browseURL(confirm_path)
-        }
       }
 
-      message("\n!! INTERACTIVE CHECKPOINT [Step ", serial_num, "]: ", srv_message)
-      user_choice <- readline("Confirm  data deletion and resume validation checks? (Y/N): ")
+      if (isTRUE(overwriteWithoutAsking)) {
+        message("!!! 🛑 ATTENTION: VALIDATION CHECKPOINT TRIGGERED 🛑 !!!")
+        message(">> Server checkpoint message: ", srv_message)
+        message(">> `overwriteWithoutAsking = TRUE` is active. Auto-confirming data actions...")
 
-      if (tolower(user_choice) == "y") {
-        message(">> Resuming backend check engine...")
         res_resume <-
           POST(
             url = paste0(api_root_url, "/api/Screening/ConfirmAction/", job_id),
@@ -129,12 +123,36 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
             body = list(SerialNumber = serial_num),
             encode = "json"
           )
-        # this will stop if error code returned.
         rdbes_handle_response(res_resume)
         Sys.sleep(3)
         next
       } else {
-        stop("Pipeline aborted by user at confirmation checkpoint.")
+        if (status_code(res_dl_confirm) == 200) {
+          if (has_rstudio()) {
+            rstudioapi::navigateToFile(confirm_path)
+          } else {
+            browseURL(confirm_path)
+          }
+        }
+
+        message("\n!! INTERACTIVE CHECKPOINT [Step ", serial_num, "]: ", srv_message)
+        user_choice <- readline("Confirm data deletion and resume validation checks? (Y/N): ")
+
+        if (tolower(user_choice) == "y") {
+          message(">> Resuming backend check engine...")
+          res_resume <-
+            POST(
+              url = paste0(api_root_url, "/api/Screening/ConfirmAction/", job_id),
+              headers,
+              body = list(SerialNumber = serial_num),
+              encode = "json"
+            )
+          rdbes_handle_response(res_resume)
+          Sys.sleep(3)
+          next
+        } else {
+          stop("Pipeline aborted by user at confirmation checkpoint.")
+        }
       }
     }
 
@@ -143,8 +161,8 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
   }
 
   # 4. Handle Results
-  has_errors <- status_data$HasErrors %||% status_data$hasErrors
-  reordered_name <- status_data$ReorderedFileName %||%   status_data$reorderedFileName
+  has_errors <- status_data[["HasErrors"]] %||% status_data[["hasErrors"]]
+  reordered_name <- status_data[["ReorderedFileName"]] %||% status_data[["reorderedFileName"]]
 
   # --- Step 3.5: Download Reordered CSV ---
   if (!is.null(reordered_name)) {
@@ -153,7 +171,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
 
     res_reordered <-
       GET(
-        url =  paste0(api_root_url, "/api/Screening/DownloadReordered/", URLencode(reordered_name)),
+        url = paste0(api_root_url, "/api/Screening/DownloadReordered/", URLencode(reordered_name)),
         headers,
         long_timeout,
         write_disk(reordered_path, overwrite = TRUE),
@@ -162,10 +180,12 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
 
     if (status_code(res_reordered) == 200) {
       message(">> Reordered file saved: ", reordered_path)
-      if (has_rstudio()) {
-        rstudioapi::navigateToFile(reordered_path)
-      } else {
-        browseURL(reordered_path)
+      if (!isTRUE(overwriteWithoutAsking)) {
+        if (has_rstudio()) {
+          rstudioapi::navigateToFile(reordered_path)
+        } else {
+          browseURL(reordered_path)
+        }
       }
     } else {
       message(">> [HTTP ", status_code(res_reordered), "] Reordered file not available.")
@@ -173,6 +193,7 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
   }
 
   # --- Step 4.0: Download Error Report ---
+  should_call_enqueue <- FALSE
   if (isTRUE(has_errors)) {
     message("\n--- Step 4: Downloading Error Report ---")
     report_filename <- paste0("Screening_Report_", job_id, ".json")
@@ -186,24 +207,30 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
     if (status_code(res_dl) != 200) stop("Failed to download error report.")
 
     report <- fromJSON(report_path)
-    message("!! SCREENING FAILED. Report: ", report_path)
+    is_duplicate <- grepl("duplicate", tolower(report[["Message"]])) || !is.null(report[["TotalErrorsFound"]])
 
-    if (has_rstudio()) {
-      rstudioapi::navigateToFile(report_path)
-    } else {
-      browseURL(report_path)
-    }
-
-    # Duplicate check logic
-    is_duplicate <- grepl("duplicate", tolower(report$Message)) || !is.null(report$TotalErrorsFound)
-    should_call_enqueue <- FALSE
     if (is_duplicate) {
-      if (tolower(readline("Overwrite and import? (Y/N): ")) == "y") {
+      if (isTRUE(overwriteWithoutAsking)) {
+        message("\n!!! 🛑 ATTENTION: DUPLICATE DATA DETECTED 🛑 !!!")
+        message(">> Existing records are being replaced because `overwriteWithoutAsking = TRUE` is active.")
+        message(">> Local report details stored at: ", report_path)
         should_call_enqueue <- TRUE
       } else {
-        return(report)
+        message("!! SCREENING FAILED due to duplication conflict. Report: ", report_path)
+        if (has_rstudio()) {
+          rstudioapi::navigateToFile(report_path)
+        } else {
+          browseURL(report_path)
+        }
+
+        if (tolower(readline("Overwrite and import? (Y/N): ")) == "y") {
+          should_call_enqueue <- TRUE
+        } else {
+          return(report)
+        }
       }
     } else {
+      message("!! SCREENING FAILED. Critical formatting syntax error detected.")
       return(report)
     }
   } else {
@@ -214,21 +241,23 @@ rdbes_upload_data <- function(file_path, hierarchy, production = getOption("rdbe
   # 5. Final Step: Enqueue
   if (should_call_enqueue) {
     message("\n--- Step 5: Finalizing Import ---")
+    final_overwrite_api_string <- if (isTRUE(overwriteWithoutAsking)) "true" else "false"
+
     res_import <-
       GET(
         url = paste0(api_root_url, "/api/ImportQueue/Enqueue"),
         headers,
         query =
-        list(
-          modifiedFileNameOnServer = up_data$modifiedFileNameOnServer,
-          uploadedFileName = basename(file_path),
-          hierarcyType = hierarchy,
-          overWrite = "true"
-        ),
+          list(
+            modifiedFileNameOnServer = up_data[["modifiedFileNameOnServer"]],
+            uploadedFileName = basename(file_path),
+            hierarcyType = hierarchy,
+            overWrite = final_overwrite_api_string
+          ),
         if (verbose) verbose() else NULL
       )
     import_data <- rdbes_handle_response(res_import)
-    message(">> SUCCESS: ", import_data$Message)
+    message(">> SUCCESS: ", import_data[["Message"]])
     return(invisible(import_data))
   }
 }
